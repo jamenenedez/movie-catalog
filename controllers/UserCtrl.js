@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 var in_array = require('in_array');
-var User = mongoose.model('User');
+var User = require("../models/User");
+const UserController = {};
 var url = require('url');
 
-exports.getUserByID = function (req, res, err) {
+UserController.getUserByID = function (req, res, err) {
     User.findById(req.params.id, function (err, users) {
         if (err) {
             res.send(503, err.message);
@@ -13,7 +14,7 @@ exports.getUserByID = function (req, res, err) {
     });
 };
 
-exports.getUsersByAttributes = function (req, res, err) {
+UserController.getUsersByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -30,7 +31,7 @@ exports.getUsersByAttributes = function (req, res, err) {
     });
 };
 
-exports.updateUser = function (req, res, err) {
+UserController.updateUser = function (req, res, err) {
     User.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -52,7 +53,7 @@ exports.updateUser = function (req, res, err) {
     );
 };
 
-exports.deleteUser = function (req, res, err) {
+UserController.deleteUser = function (req, res, err) {
     User.findById(req.params.id, function (err, user) {
         if (err) {
             res.send(503, err.message);
@@ -72,7 +73,7 @@ exports.deleteUser = function (req, res, err) {
     });
 };
 
-exports.saveUser = function (req, res, err) {
+UserController.saveUser = function (req, res, err) {
     var user = new User(req.body);
 
     user.save({}, function (err, user) {
@@ -83,3 +84,5 @@ exports.saveUser = function (req, res, err) {
         }
     });
 };
+
+module.exports = UserController;

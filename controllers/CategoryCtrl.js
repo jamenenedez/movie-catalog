@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 var in_array = require('in_array');
-var Category = mongoose.model('Category');
+var Category = require("../models/Category");
+const CategoryController = {};
 var url = require('url');
 
-exports.getCategoryByID = function (req, res, err) {
+CategoryController.getCategoryByID = function (req, res, err) {
     Category.findById(req.params.id, function (err, category) {
         if (err) {
             res.send(503, err.message);
@@ -13,7 +14,7 @@ exports.getCategoryByID = function (req, res, err) {
     });
 };
 
-exports.getCategorysByAttributes = function (req, res, err) {
+CategoryController.getCategorysByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -30,7 +31,7 @@ exports.getCategorysByAttributes = function (req, res, err) {
     });
 };
 
-exports.updateCategory = function (req, res, err) {
+CategoryController.updateCategory = function (req, res, err) {
     Category.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -52,7 +53,7 @@ exports.updateCategory = function (req, res, err) {
     );
 };
 
-exports.deleteCategory = function (req, res, err) {
+CategoryController.deleteCategory = function (req, res, err) {
     Category.findById(req.params.id, function (err, category) {
         if (err) {
             res.send(503, err.message);
@@ -72,7 +73,7 @@ exports.deleteCategory = function (req, res, err) {
     });
 };
 
-exports.saveCategory = function (req, res, err) {
+CategoryController.saveCategory = function (req, res, err) {
     var category = new Category(req.body);
 
     category.save(req.body, function (err, category) {
@@ -83,3 +84,5 @@ exports.saveCategory = function (req, res, err) {
         }
     });
 };
+
+module.exports = CategoryController;

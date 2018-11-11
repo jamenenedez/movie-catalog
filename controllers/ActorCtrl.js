@@ -1,19 +1,10 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 var in_array = require('in_array');
-var Actor = mongoose.model('Actor');
+var Actor = require("../models/Actor");
+const ActorController = {};
 var url = require('url');
 
-/*exports.getMovies = function (req, res, err) {
-    Movie.find({}, function (err, movies) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
-            res.status(200).jsonp(movies);
-        }
-    });
-};*/
-
-exports.getActorByID = function (req, res, err) {
+ActorController.getActorByID = function (req, res, err) {
     Actor.findById(req.params.id, function (err, actor) {
         if (err) {
             res.send(503, err.message);
@@ -21,9 +12,9 @@ exports.getActorByID = function (req, res, err) {
             res.status(200).jsonp(actor);
         }
     });
-};
+}
 
-exports.getActorsByAttributes = function (req, res, err) {
+ActorController.getActorsByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -40,7 +31,7 @@ exports.getActorsByAttributes = function (req, res, err) {
     });
 };
 
-exports.updateActor = function (req, res, err) {
+ActorController.updateActor = function (req, res, err) {
     Actor.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -62,7 +53,7 @@ exports.updateActor = function (req, res, err) {
     );
 };
 
-exports.deleteActor = function (req, res, err) {
+ActorController.deleteActor = function (req, res, err) {
     Actor.findById(req.params.id, function (err, actor) {
         if (err) {
             res.send(503, err.message);
@@ -82,7 +73,7 @@ exports.deleteActor = function (req, res, err) {
     });
 };
 
-exports.saveActor = function (req, res, err) {
+ActorController.saveActor = function (req, res, err) {
     var actor = new Actor(req.body);
 
     actor.save({}, function (err, actor) {
@@ -93,3 +84,5 @@ exports.saveActor = function (req, res, err) {
         }
     });
 };
+
+module.exports = ActorController; 

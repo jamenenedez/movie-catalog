@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 var in_array = require('in_array');
-var Gender = mongoose.model('Gender');
+var Gender = require("../models/Gender");
+const GenderController = {};
 var url = require('url');
 
-exports.getGenderByID = function (req, res, err) {
+GenderController.getGenderByID = function (req, res, err) {
     Gender.findById(req.params.id, function (err, gender) {
         if (err) {
             res.send(503, err.message);
@@ -13,7 +14,7 @@ exports.getGenderByID = function (req, res, err) {
     });
 };
 
-exports.getGendersByAttributes = function (req, res, err) {
+GenderController.getGendersByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -30,7 +31,7 @@ exports.getGendersByAttributes = function (req, res, err) {
     });
 };
 
-exports.updateGender = function (req, res, err) {
+GenderController.updateGender = function (req, res, err) {
     Gender.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -52,7 +53,7 @@ exports.updateGender = function (req, res, err) {
     );
 };
 
-exports.deleteGender = function (req, res, err) {
+GenderController.deleteGender = function (req, res, err) {
     Gender.findById(req.params.id, function (err, gender) {
         if (err) {
             res.send(503, err.message);
@@ -72,7 +73,7 @@ exports.deleteGender = function (req, res, err) {
     });
 };
 
-exports.saveGender = function (req, res, err) {
+GenderController.saveGender = function (req, res, err) {
     var gender = new Gender(req.body);
 
     gender.save(req.body, function (err, gender) {
@@ -83,3 +84,5 @@ exports.saveGender = function (req, res, err) {
         }
     });
 };
+
+module.exports = GenderController;

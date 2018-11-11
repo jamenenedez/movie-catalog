@@ -1,19 +1,10 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 var in_array = require('in_array');
-var Movie = mongoose.model('Movie');
+var Movie = require("../models/Movie");
+const MovieController = {};
 var url = require('url');
 
-/*exports.getMovies = function (req, res, err) {
-    Movie.find({}, function (err, movies) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
-            res.status(200).jsonp(movies);
-        }
-    });
-};*/
-
-exports.getMovieByID = function (req, res, err) {
+MovieController.getMovieByID = function (req, res, err) {
     Movie.findById(req.params.id, function (err, movies) {
         if (err) {
             res.send(503, err.message);
@@ -23,7 +14,7 @@ exports.getMovieByID = function (req, res, err) {
     });
 };
 
-exports.getMoviesByAttributes = function (req, res, err) {
+MovieController.getMoviesByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -40,7 +31,7 @@ exports.getMoviesByAttributes = function (req, res, err) {
     });
 };
 
-exports.updateMovie = function (req, res, err) {
+MovieController.updateMovie = function (req, res, err) {
     Movie.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -62,7 +53,7 @@ exports.updateMovie = function (req, res, err) {
     );
 };
 
-exports.deleteMovie = function (req, res, err) {
+MovieController.deleteMovie = function (req, res, err) {
     Movie.findById(req.params.id, function (err, movie) {
         if (err) {
             res.send(503, err.message);
@@ -82,7 +73,7 @@ exports.deleteMovie = function (req, res, err) {
     });
 };
 
-exports.saveMovie = function (req, res, err) {
+MovieController.saveMovie = function (req, res, err) {
     var movie = new Movie(req.body);
 
     movie.save({}, function (err, movie) {
@@ -93,3 +84,5 @@ exports.saveMovie = function (req, res, err) {
         }
     });
 };
+
+module.exports = MovieController;

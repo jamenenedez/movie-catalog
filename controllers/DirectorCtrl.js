@@ -1,19 +1,10 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 var in_array = require('in_array');
-var Director = mongoose.model('Director');
+var Director = require("../models/Director");
+const DirectorController = {};
 var url = require('url');
 
-/*exports.getMovies = function (req, res, err) {
-    Movie.find({}, function (err, movies) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
-            res.status(200).jsonp(movies);
-        }
-    });
-};*/
-
-exports.getDirectorByID = function (req, res, err) {
+DirectorController.getDirectorByID = function (req, res, err) {
     Director.findById(req.params.id, function (err, director) {
         if (err) {
             res.send(503, err.message);
@@ -23,7 +14,7 @@ exports.getDirectorByID = function (req, res, err) {
     });
 };
 
-exports.getDirectorsByAttributes = function (req, res, err) {
+DirectorController.getDirectorsByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -40,7 +31,7 @@ exports.getDirectorsByAttributes = function (req, res, err) {
     });
 };
 
-exports.updateDirector = function (req, res, err) {
+DirectorController.updateDirector = function (req, res, err) {
     Director.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -62,7 +53,7 @@ exports.updateDirector = function (req, res, err) {
     );
 };
 
-exports.deleteDirector = function (req, res, err) {
+DirectorController.deleteDirector = function (req, res, err) {
     Director.findById(req.params.id, function (err, director) {
         if (err) {
             res.send(503, err.message);
@@ -82,7 +73,7 @@ exports.deleteDirector = function (req, res, err) {
     });
 };
 
-exports.saveDirector = function (req, res, err) {
+DirectorController.saveDirector = function (req, res, err) {
     var director = new Director(req.body);
     director.save({}, function (err, director) {
         if (err) {
@@ -92,3 +83,5 @@ exports.saveDirector = function (req, res, err) {
         }
     });
 };
+
+module.exports = DirectorController;
