@@ -8,6 +8,8 @@ var Movie = require('../models/Movie');
 var Actor = require('../models/Actor');
 var Director = require('../models/Director');
 var Gender = require('../models/Gender');
+var Category = require('../models/Category');
+var User = require('../models/User');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -45,5 +47,21 @@ router.route('/gender/:id').get(GenderCtrl.getGenderByID);
 router.route('/gender').post(upload.array(), GenderCtrl.saveGender);
 router.route('/gender/:id').put(GenderCtrl.updateGender);
 router.route('/gender/:id').delete(GenderCtrl.deleteGender);
+
+// Category
+var CategoryCtrl = require('../controllers/CategoryCtrl');
+router.route('/categories').get(CategoryCtrl.getCategorysByAttributes);
+router.route('/category/:id').get(CategoryCtrl.getCategoryByID);
+router.route('/category').post(upload.array(), CategoryCtrl.saveCategory);
+router.route('/category/:id').put(CategoryCtrl.updateCategory);
+router.route('/category/:id').delete(CategoryCtrl.deleteCategory);
+
+// User
+var UserCtrl = require('../controllers/UserCtrl');
+router.route('/users').get(UserCtrl.getUsersByAttributes);
+router.route('/user/:id').get(UserCtrl.getUserByID);
+router.route('/user').post(upload.array(), UserCtrl.saveUser);
+router.route('/user/:id').put(UserCtrl.updateUser);
+router.route('/user/:id').delete(UserCtrl.deleteUser);
 
 module.exports = router;
