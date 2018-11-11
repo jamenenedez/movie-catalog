@@ -1,47 +1,37 @@
 var mongoose = require('mongoose');
 var in_array = require('in_array');
-var Director = mongoose.model('Director');
+var Gender = mongoose.model('Gender');
 var url = require('url');
 
-/*exports.getMovies = function (req, res, err) {
-    Movie.find({}, function (err, movies) {
+exports.getGenderByID = function (req, res, err) {
+    Gender.findById(req.params.id, function (err, gender) {
         if (err) {
             res.send(503, err.message);
         } else {
-            res.status(200).jsonp(movies);
-        }
-    });
-};*/
-
-exports.getDirectorByID = function (req, res, err) {
-    Director.findById(req.params.id, function (err, director) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
-            res.status(200).jsonp(director);
+            res.status(200).jsonp(gender);
         }
     });
 };
 
-exports.getDirectorsByAttributes = function (req, res, err) {
+exports.getGendersByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
-        if (in_array(key, Object.keys(Director.schema.paths))) {
+        if (in_array(key, Object.keys(Gender.schema.paths))) {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    Director.find({ $or: [params] }, function (err, directors) {
+    Gender.find({ $or: [params] }, function (err, genders) {
         if (err) {
             res.send(503, err.message);
         } else {
-            res.status(200).jsonp(directors);
+            res.status(200).jsonp(genders);
         }
     });
 };
 
-exports.updateDirector = function (req, res, err) {
-    Director.findByIdAndUpdate(
+exports.updateGender = function (req, res, err) {
+    Gender.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
 
@@ -54,27 +44,27 @@ exports.updateDirector = function (req, res, err) {
         { new: true },
 
         // the callback function
-        (err, director) => {
+        (err, gender) => {
             // Handle any possible database errors
             if (err) return res.status(500).send(err);
-            return res.send(director);
+            return res.send(gender);
         }
     );
 };
 
-exports.deleteDirector = function (req, res, err) {
-    Director.findById(req.params.id, function (err, director) {
+exports.deleteGender = function (req, res, err) {
+    Gender.findById(req.params.id, function (err, gender) {
         if (err) {
             res.send(503, err.message);
         } else {
-            if (!director) {
+            if (!gender) {
                 res.status(404).send();
             } else {
-                director.remove(function (err, removedDirector) {
+                gender.remove(function (err, removedGender) {
                     if (err) {
                         res.send(503, err.message);
                     } else {
-                        res.send(removedDirector);
+                        res.send(removedGender);
                     }
                 });
             }
@@ -82,13 +72,14 @@ exports.deleteDirector = function (req, res, err) {
     });
 };
 
-exports.saveDirector = function (req, res, err) {
-    var director = new Director(req.body);
-    director.save({}, function (err, director) {
+exports.saveGender = function (req, res, err) {
+    var gender = new Gender(req.body);
+
+    gender.save(req.body, function (err, gender) {
         if (err) {
             res.send(503, err.message);
         } else {
-            res.status(200).jsonp(director);
+            res.status(200).jsonp(gender);
         }
     });
 };

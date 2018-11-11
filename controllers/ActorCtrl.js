@@ -83,10 +83,7 @@ exports.deleteActor = function (req, res, err) {
 };
 
 exports.saveActor = function (req, res, err) {
-    var actor = new Actor({
-        fullname: req.body.fullname,
-        nationality: req.body.nationality
-    });
+    var actor = new Actor(req.body);
 
     actor.save({}, function (err, actor) {
         if (err) {

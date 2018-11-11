@@ -83,12 +83,7 @@ exports.deleteMovie = function (req, res, err) {
 };
 
 exports.saveMovie = function (req, res, err) {
-    var movie = new Movie({
-        title: req.body.title,
-        director: req.body.director,
-        year: req.body.year,
-        gender: req.body.gender,
-    });
+    var movie = new Movie(req.body);
 
     movie.save({}, function (err, movie) {
         if (err) {
