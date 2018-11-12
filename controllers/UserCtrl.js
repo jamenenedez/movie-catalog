@@ -91,84 +91,64 @@ UserController.save = function (req, res, err) {
 UserController.qualifyMovie = function (req, res, err) {
 
     Ranking.findOneAndUpdate({ movie_id: req.body.movie_id, user_id: req.params.id }, { $set: { score: req.body.score } });
-    // find a movie with the movie_id
-    /*     Movie.findById(req.body.movie_id, function (err, movie) {
-            if (!movie) {
-                res.status(404).send();
-            } else {
-                // count how many users qualify this movie */
-    Ranking.find({ movie_id: movie._id }, function (err, ranks) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
-            // verify if the user has a qualification for this movie                        
-            Ranking.findOne({ movie_id: movie._id, user_id: req.params.id },
-                function (error, rank) {
-                    if (error) {
-                        res.send(503, err.message);
-                    }
-                    else {
-                        if (!rank) {
-                            new_rank = new Ranking({
-                                movie_id: movie._id,
-                                user_id: req.params.id,
-                                score: req.body.score
+
+    Ranking.find({ movie_id: req.body.movie_id }, function (err, ranks) {
+        var count_users = ranks.length;
+        // verify if the user has a qualification for this movie                        
+        Ranking.findOne({ movie_id: req.body.movie_id, user_id: req.params.id },
+            function (error, rank) {
+                if (!rank) {
+                    console.log("no existe");
+                    new_rank = new Ranking({
+                        movie_id: req.body.movie_id,
+                        user_id: req.params.id,
+                        score: req.body.score
+                    });
+                    new_rank.save({}, function (err, rank) {
+                        if (err) {
+                            res.send(503, err.message);
+                        } else {
+                            var total_score = 0;
+                            ranks.forEach(rank => {
+                                total_score += rank.score;
                             });
-                            new_rank.save({}, function (err, rank) {
-                                if (err) {
-                                    res.send(503, err.message);
-                                } else {
-                                    var count_users = 0;
-                                    var total_score = 0;
-                                    // If user has not ranking the movie yet
-                                    ranks.forEach(rank => {
-                                        count_users++;
-                                        total_score += rank.score;
-                                    });
-                                    var score = (total_score + rank.score) / (count_users + 1);
-                                    Movie.findByIdAndUpdate(movie._id, { $set: { score: score } },
-                                        function (error, movie) {
-                                            if (error) {
-                                                res.send(503, error.message);
-                                            } else {
-                                                res.status(200).jsonp(movie);
-                                            }
-                                        });
-                                }
-                            });
-                        }
-                        else {
-                            Ranking.findByIdAndUpdate(rank._id, { $set: { score: req.body.score } },
-                                function (error, rank) {
+                            var score = (total_score + rank.score) / (count_users + 1);
+                            Movie.findByIdAndUpdate(req.body.movie_id, { $set: { score: score } },
+                                function (error, movie) {
                                     if (error) {
                                         res.send(503, error.message);
                                     } else {
-                                        var count_users = 0;
-                                        var total_score = 0;
-                                        // If user has not ranking the movie yet
-                                        ranks.forEach(inner_rank => {
-                                            count_users++;
-                                            total_score += inner_rank.score;
-                                        });
-                                        var score = (total_score) / (count_users);
-                                        Movie.findByIdAndUpdate(movie._id, { $set: { score: score } },
-                                            function (error, movie) {
-                                                if (error) {
-                                                    res.send(503, error.message);
-                                                } else {
-                                                    res.status(200).jsonp(movie);
-                                                }
-                                            });
+                                        res.status(200).jsonp(movie);
                                     }
                                 });
                         }
-                    }
-                });
-        }
-    }
-    );
-    /*      }
-     }); */
+                    });
+                }
+                else {
+                    console.log("existe");
+                    Ranking.findByIdAndUpdate(rank._id, { $set: { score: req.body.score } },
+                        function (error, rank) {
+                            if (error) {
+                                res.send(503, error.message);
+                            } else {
+                                var total_score = 0;
+                                ranks.forEach(inner_rank => {
+                                    total_score += inner_rank.score;
+                                });
+                                var score = (total_score) / (count_users);
+                                Movie.findByIdAndUpdate(req.body.movie_id, { $set: { score: score } },
+                                    function (error, movie) {
+                                        if (error) {
+                                            res.send(503, error.message);
+                                        } else {
+                                            res.status(200).jsonp(movie);
+                                        }
+                                    });
+                            }
+                        });
+                }
+            });
+    });
 }
 
 module.exports = UserController;
