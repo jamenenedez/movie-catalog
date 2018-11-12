@@ -58,10 +58,11 @@ router.route('/category/:id').delete(CategoryCtrl.deleteCategory);
 
 // User
 var UserCtrl = require('../controllers/UserCtrl');
-router.route('/users').get(UserCtrl.getUsersByAttributes);
-router.route('/user/:id').get(UserCtrl.getUserByID);
-router.route('/user').post(upload.array(), UserCtrl.saveUser);
-router.route('/user/:id').put(UserCtrl.updateUser);
-router.route('/user/:id').delete(UserCtrl.deleteUser);
+router.route('/users').get(UserCtrl.getAllByAttributes);
+router.route('/user/:id').get(UserCtrl.getByID);
+router.route('/user').post(upload.array(), UserCtrl.save);
+router.route('/user/:id').put(UserCtrl.update);
+router.route('/user/:id').delete(UserCtrl.delete);
+router.route('/user/:id/movies').put(UserCtrl.qualifyMovie);
 
 module.exports = router;

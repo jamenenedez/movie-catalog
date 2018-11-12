@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 var in_array = require('in_array');
 var User = require("../models/User");
+var Movie = require("../models/Movie");
+var Ranking = require("../models/Ranking");
 const UserController = {};
 var url = require('url');
+var assert = require('assert');
 
-UserController.getUserByID = function (req, res, err) {
+
+UserController.getByID = function (req, res, err) {
     User.findById(req.params.id, function (err, users) {
         if (err) {
             res.send(503, err.message);
@@ -14,12 +18,14 @@ UserController.getUserByID = function (req, res, err) {
     });
 };
 
-UserController.getUsersByAttributes = function (req, res, err) {
+UserController.getAllByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
         if (in_array(key, Object.keys(User.schema.paths))) {
-            req.query[key] !== "" ? params[key] = req.query[key] : null;
+            if (key != "_id") {
+                req.query[key] !== "" ? params[key] = req.query[key] : null;
+            }
         }
     }
     User.find({ $or: [params] }, function (err, users) {
@@ -31,7 +37,7 @@ UserController.getUsersByAttributes = function (req, res, err) {
     });
 };
 
-UserController.updateUser = function (req, res, err) {
+UserController.update = function (req, res, err) {
     User.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -53,27 +59,24 @@ UserController.updateUser = function (req, res, err) {
     );
 };
 
-UserController.deleteUser = function (req, res, err) {
-    User.findById(req.params.id, function (err, user) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
-            if (!user) {
-                res.status(404).send();
-            } else {
-                user.remove(function (err, removedUser) {
-                    if (err) {
-                        res.send(503, err.message);
-                    } else {
-                        res.send(removedUser);
-                    }
-                });
-            }
+UserController.delete = function (req, res, err) {
+    User.findOneAndRemove(req.params.id, (err, user) => {
+        // As always, handle any potential errors:
+        if (err) res.send(503, err.message);
+        // We'll create a simple object to send back with a message and the id of the document that was removed
+        // You can really do this however you want, though.
+        else {
+            const response = {
+                message: "User successfully deleted",
+                id: user._id
+            };
+            //res.status(200).jsonp(user); 
+            res.status(200).send(response);
         }
     });
 };
 
-UserController.saveUser = function (req, res, err) {
+UserController.save = function (req, res, err) {
     var user = new User(req.body);
 
     user.save({}, function (err, user) {
@@ -84,5 +87,88 @@ UserController.saveUser = function (req, res, err) {
         }
     });
 };
+
+UserController.qualifyMovie = function (req, res, err) {
+
+    Ranking.findOneAndUpdate({ movie_id: req.body.movie_id, user_id: req.params.id }, { $set: { score: req.body.score } });
+    // find a movie with the movie_id
+    /*     Movie.findById(req.body.movie_id, function (err, movie) {
+            if (!movie) {
+                res.status(404).send();
+            } else {
+                // count how many users qualify this movie */
+    Ranking.find({ movie_id: movie._id }, function (err, ranks) {
+        if (err) {
+            res.send(503, err.message);
+        } else {
+            // verify if the user has a qualification for this movie                        
+            Ranking.findOne({ movie_id: movie._id, user_id: req.params.id },
+                function (error, rank) {
+                    if (error) {
+                        res.send(503, err.message);
+                    }
+                    else {
+                        if (!rank) {
+                            new_rank = new Ranking({
+                                movie_id: movie._id,
+                                user_id: req.params.id,
+                                score: req.body.score
+                            });
+                            new_rank.save({}, function (err, rank) {
+                                if (err) {
+                                    res.send(503, err.message);
+                                } else {
+                                    var count_users = 0;
+                                    var total_score = 0;
+                                    // If user has not ranking the movie yet
+                                    ranks.forEach(rank => {
+                                        count_users++;
+                                        total_score += rank.score;
+                                    });
+                                    var score = (total_score + rank.score) / (count_users + 1);
+                                    Movie.findByIdAndUpdate(movie._id, { $set: { score: score } },
+                                        function (error, movie) {
+                                            if (error) {
+                                                res.send(503, error.message);
+                                            } else {
+                                                res.status(200).jsonp(movie);
+                                            }
+                                        });
+                                }
+                            });
+                        }
+                        else {
+                            Ranking.findByIdAndUpdate(rank._id, { $set: { score: req.body.score } },
+                                function (error, rank) {
+                                    if (error) {
+                                        res.send(503, error.message);
+                                    } else {
+                                        var count_users = 0;
+                                        var total_score = 0;
+                                        // If user has not ranking the movie yet
+                                        ranks.forEach(inner_rank => {
+                                            count_users++;
+                                            total_score += inner_rank.score;
+                                        });
+                                        var score = (total_score) / (count_users);
+                                        Movie.findByIdAndUpdate(movie._id, { $set: { score: score } },
+                                            function (error, movie) {
+                                                if (error) {
+                                                    res.send(503, error.message);
+                                                } else {
+                                                    res.status(200).jsonp(movie);
+                                                }
+                                            });
+                                    }
+                                });
+                        }
+                    }
+                });
+        }
+    }
+    );
+    /*      }
+     }); */
+}
 
 module.exports = UserController;
