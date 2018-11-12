@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
 var in_array = require('in_array');
 var User = require("../models/User");
-var Movie = require("../models/Movie");
-var Ranking = require("../models/Ranking");
 const UserController = {};
 var url = require('url');
-var assert = require('assert');
 
 
 UserController.getByID = function (req, res, err) {
@@ -87,37 +84,5 @@ UserController.save = function (req, res, err) {
         }
     });
 };
-
-UserController.qualifyMovie = function (req, res, err) {
-
-    Ranking.findOneAndUpdate({ movie_id: req.body.movie_id, user_id: req.params.id },
-        { $set: { score: req.body.score } }, { new: true },
-        function (err, rank) {
-            if (!rank) {
-                new_rank = new Ranking({
-                    movie_id: req.body.movie_id,
-                    user_id: req.params.id,
-                    score: req.body.score
-                });
-                new_rank.save({});
-            }
-        });
-
-    Ranking.find({ movie_id: req.body.movie_id }, function (err, ranks) {
-        var count_users = ranks.length;
-        var total_score = 0;
-        ranks.forEach(rank => {
-            total_score += rank.score;
-        });
-        Movie.findByIdAndUpdate(req.body.movie_id, { $set: { score: ((total_score) / (count_users)) } },
-            function (error, movie) {
-                if (error) {
-                    res.send(503, error.message);
-                } else {
-                    res.status(200).jsonp(movie);
-                }
-            });
-    });    
-}
 
 module.exports = UserController;
