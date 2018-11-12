@@ -9,11 +9,17 @@ var usersRouter = require('./routes/users');
 
 var mongoose = require('mongoose');
 
+const URI = 'mongodb+srv://jamenendez:Estudios-*2018@cluster0-7mf0l.mongodb.net/movie_catalog';
+mongoose.connect(URI, { useNewUrlParser: true })
+    .then(db => console.log('Conectado a la Base de Datos'))
+    .catch(error => console.error(error));
+module.exports = mongoose;
+/* 
 mongoose.connect('mongodb://localhost/movies', {useNewUrlParser: true}, function(error, response){
   if (error) {
     throw error;
   }
-});
+}); */
 
 var app = express();
 
