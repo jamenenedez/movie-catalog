@@ -4,7 +4,7 @@ var Category = require("../models/Category");
 const CategoryController = {};
 var url = require('url');
 
-CategoryController.getCategoryByID = function (req, res, err) {
+CategoryController.getByID = function (req, res, err) {
     Category.findById(req.params.id, function (err, category) {
         if (err) {
             res.send(503, err.message);
@@ -14,7 +14,7 @@ CategoryController.getCategoryByID = function (req, res, err) {
     });
 };
 
-CategoryController.getCategorysByAttributes = function (req, res, err) {
+CategoryController.getAllByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -31,7 +31,7 @@ CategoryController.getCategorysByAttributes = function (req, res, err) {
     });
 };
 
-CategoryController.updateCategory = function (req, res, err) {
+CategoryController.update = function (req, res, err) {
     Category.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -53,7 +53,7 @@ CategoryController.updateCategory = function (req, res, err) {
     );
 };
 
-CategoryController.deleteCategory = function (req, res, err) {
+CategoryController.delete = function (req, res, err) {
     Category.findById(req.params.id, function (err, category) {
         if (err) {
             res.send(503, err.message);
@@ -73,7 +73,7 @@ CategoryController.deleteCategory = function (req, res, err) {
     });
 };
 
-CategoryController.saveCategory = function (req, res, err) {
+CategoryController.save = function (req, res, err) {
     var category = new Category(req.body);
 
     category.save(req.body, function (err, category) {

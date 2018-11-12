@@ -4,7 +4,7 @@ var Gender = require("../models/Gender");
 const GenderController = {};
 var url = require('url');
 
-GenderController.getGenderByID = function (req, res, err) {
+GenderController.getByID = function (req, res, err) {
     Gender.findById(req.params.id, function (err, gender) {
         if (err) {
             res.send(503, err.message);
@@ -14,7 +14,7 @@ GenderController.getGenderByID = function (req, res, err) {
     });
 };
 
-GenderController.getGendersByAttributes = function (req, res, err) {
+GenderController.getAllByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -31,7 +31,7 @@ GenderController.getGendersByAttributes = function (req, res, err) {
     });
 };
 
-GenderController.updateGender = function (req, res, err) {
+GenderController.update = function (req, res, err) {
     Gender.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -53,7 +53,7 @@ GenderController.updateGender = function (req, res, err) {
     );
 };
 
-GenderController.deleteGender = function (req, res, err) {
+GenderController.delete = function (req, res, err) {
     Gender.findById(req.params.id, function (err, gender) {
         if (err) {
             res.send(503, err.message);
@@ -73,7 +73,7 @@ GenderController.deleteGender = function (req, res, err) {
     });
 };
 
-GenderController.saveGender = function (req, res, err) {
+GenderController.save = function (req, res, err) {
     var gender = new Gender(req.body);
 
     gender.save(req.body, function (err, gender) {

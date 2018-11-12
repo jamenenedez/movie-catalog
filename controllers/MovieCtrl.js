@@ -5,7 +5,7 @@ var Ranking = require("../models/Ranking");
 const MovieController = {};
 var url = require('url');
 
-MovieController.getMovieByID = function (req, res, err) {
+MovieController.getByID = function (req, res, err) {
     Movie.findById(req.params.id, function (err, movies) {
         if (err) {
             res.send(503, err.message);
@@ -15,7 +15,7 @@ MovieController.getMovieByID = function (req, res, err) {
     });
 };
 
-MovieController.getMoviesByAttributes = function (req, res, err) {
+MovieController.getAllByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -32,7 +32,7 @@ MovieController.getMoviesByAttributes = function (req, res, err) {
     });
 };
 
-MovieController.updateMovie = function (req, res, err) {
+MovieController.update = function (req, res, err) {
     Movie.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -54,7 +54,7 @@ MovieController.updateMovie = function (req, res, err) {
     );
 };
 
-MovieController.deleteMovie = function (req, res, err) {
+MovieController.delete = function (req, res, err) {
     Movie.findById(req.params.id, function (err, movie) {
         if (err) {
             res.send(503, err.message);
@@ -74,7 +74,7 @@ MovieController.deleteMovie = function (req, res, err) {
     });
 };
 
-MovieController.saveMovie = function (req, res, err) {
+MovieController.save = function (req, res, err) {
     var movie = new Movie(req.body);
 
     movie.save({}, function (err, movie) {

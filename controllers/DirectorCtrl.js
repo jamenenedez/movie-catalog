@@ -4,7 +4,7 @@ var Director = require("../models/Director");
 const DirectorController = {};
 var url = require('url');
 
-DirectorController.getDirectorByID = function (req, res, err) {
+DirectorController.getByID = function (req, res, err) {
     Director.findById(req.params.id, function (err, director) {
         if (err) {
             res.send(503, err.message);
@@ -14,7 +14,7 @@ DirectorController.getDirectorByID = function (req, res, err) {
     });
 };
 
-DirectorController.getDirectorsByAttributes = function (req, res, err) {
+DirectorController.getAllByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -31,7 +31,7 @@ DirectorController.getDirectorsByAttributes = function (req, res, err) {
     });
 };
 
-DirectorController.updateDirector = function (req, res, err) {
+DirectorController.update = function (req, res, err) {
     Director.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -53,7 +53,7 @@ DirectorController.updateDirector = function (req, res, err) {
     );
 };
 
-DirectorController.deleteDirector = function (req, res, err) {
+DirectorController.delete = function (req, res, err) {
     Director.findById(req.params.id, function (err, director) {
         if (err) {
             res.send(503, err.message);
@@ -73,7 +73,7 @@ DirectorController.deleteDirector = function (req, res, err) {
     });
 };
 
-DirectorController.saveDirector = function (req, res, err) {
+DirectorController.save = function (req, res, err) {
     var director = new Director(req.body);
     director.save({}, function (err, director) {
         if (err) {

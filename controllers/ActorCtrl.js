@@ -4,7 +4,7 @@ var Actor = require("../models/Actor");
 const ActorController = {};
 var url = require('url');
 
-ActorController.getActorByID = function (req, res, err) {
+ActorController.getByID = function (req, res, err) {
     Actor.findById(req.params.id, function (err, actor) {
         if (err) {
             res.send(503, err.message);
@@ -14,7 +14,7 @@ ActorController.getActorByID = function (req, res, err) {
     });
 }
 
-ActorController.getActorsByAttributes = function (req, res, err) {
+ActorController.getAllByAttributes = function (req, res, err) {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -31,7 +31,7 @@ ActorController.getActorsByAttributes = function (req, res, err) {
     });
 };
 
-ActorController.updateActor = function (req, res, err) {
+ActorController.update = function (req, res, err) {
     Actor.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -53,7 +53,7 @@ ActorController.updateActor = function (req, res, err) {
     );
 };
 
-ActorController.deleteActor = function (req, res, err) {
+ActorController.delete = function (req, res, err) {
     Actor.findById(req.params.id, function (err, actor) {
         if (err) {
             res.send(503, err.message);
@@ -73,7 +73,7 @@ ActorController.deleteActor = function (req, res, err) {
     });
 };
 
-ActorController.saveActor = function (req, res, err) {
+ActorController.save = function (req, res, err) {
     var actor = new Actor(req.body);
 
     actor.save({}, function (err, actor) {
