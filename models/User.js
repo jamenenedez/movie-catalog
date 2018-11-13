@@ -61,7 +61,12 @@ var userSchema = new Schema({
             default: false,
             required: true
         }
-    }
+    },
+
+    /**
+     * movie qualifications
+     */
+    scores: [{ type: Schema.Types.ObjectId, ref: 'Ranking' }]
 }, { timestamps: true });
 
 userSchema.plugin(uniqueValidator, { message: 'is already taken.' });
