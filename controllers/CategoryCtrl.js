@@ -1,20 +1,23 @@
 const mongoose = require('mongoose');
 var in_array = require('in_array');
 var Category = require("../models/Category");
+var Movie = require("../models/Movie");
 const CategoryController = {};
 var url = require('url');
 
-CategoryController.getByID = function (req, res, err) {
-    Category.findById(req.params.id, function (err, category) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+CategoryController.details = async (req, res, err) => {
+    await Category.findById(req.params.id).select('-__v').populate('movies', 'name -_id').then((category) => {
+        if (category) {
             res.status(200).jsonp(category);
+        } else {
+            res.status(404).jsonp("Not found");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
-};
+}
 
-CategoryController.getAllByAttributes = function (req, res, err) {
+CategoryController.list = async (req, res, err) => {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -22,16 +25,18 @@ CategoryController.getAllByAttributes = function (req, res, err) {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    Category.find({ $or: [params] }, function (err, categorys) {
-        if (err) {
-            res.send(503, err.message);
+    await Category.find({ $or: [params] }).select('-__v').populate('movies', 'name -_id').then((categories) => {
+        if (categories) {
+            res.status(200).jsonp(categories);
         } else {
-            res.status(200).jsonp(categorys);
+            res.status(404).jsonp("Not found anyone");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
-CategoryController.update = function (req, res, err) {
+CategoryController.update = async (req, res, err) => {
     Category.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -43,46 +48,39 @@ CategoryController.update = function (req, res, err) {
         // an option that asks mongoose to return the updated version 
         // of the document instead of the pre-updated one.
         { new: true },
-
-        // the callback function
-        (err, category) => {
-            // Handle any possible database errors
-            if (err) return res.status(500).send(err);
-            return res.send(category);
-        }
-    );
-};
-
-CategoryController.delete = function (req, res, err) {
-    Category.findById(req.params.id, function (err, category) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
-            if (!category) {
-                res.status(404).send();
-            } else {
-                category.remove(function (err, removedCategory) {
-                    if (err) {
-                        res.send(503, err.message);
-                    } else {
-                        res.send(removedCategory);
-                    }
-                });
-            }
-        }
-    });
-};
-
-CategoryController.save = function (req, res, err) {
-    var category = new Category(req.body);
-
-    category.save(req.body, function (err, category) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+    ).select('-__v').populate('movies', 'name -_id').then((category) => {
+        if (category) {
             res.status(200).jsonp(category);
+        } else {
+            res.status(404).jsonp("Not found");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
-module.exports = CategoryController;
+CategoryController.delete = async (req, res, err) => {
+
+    await Category.findByIdAndRemove(req.params.id).populate('movies', 'name -_id').then((category) => {
+        if (category) {
+            res.status(200).jsonp(category);
+        } else {
+            res.status(404).jsonp("Not found");
+        }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
+    });
+};
+
+CategoryController.save = async (req, res, err) => {
+
+    var category = new Category(req.body);
+    await category.save().then(async (enhanced_gender) => {
+        var enhanced_gender = await Category.findById(enhanced_gender._id).select('-__v').populate('movies', 'name -_id');
+        res.status(200).jsonp(enhanced_gender);
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
+    });
+};
+
+module.exports = CategoryController; 

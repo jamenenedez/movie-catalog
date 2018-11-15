@@ -5,8 +5,8 @@ var Nationality = require("../models/Nationality");
 const ActorController = {};
 var url = require('url');
 
-ActorController.getByID = async (req, res, err) => {
-    await Actor.findById(req.params.id).select('-__v').populate('nationality', 'name -_id').then((actor) => {
+ActorController.details = async (req, res, err) => {
+    await Actor.findById(req.params.id).select('-__v').populate('nationality movies', 'name -_id').then((actor) => {
         if (actor) {
             res.status(200).jsonp(actor);
         } else {
@@ -17,7 +17,7 @@ ActorController.getByID = async (req, res, err) => {
     });
 }
 
-ActorController.getAllByAttributes = async (req, res, err) => {
+ActorController.list = async (req, res, err) => {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -25,11 +25,11 @@ ActorController.getAllByAttributes = async (req, res, err) => {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    await Actor.find({ $or: [params] }).select('-__v').populate('nationality', 'name -_id').then((actors) => {
+    await Actor.find({ $or: [params] }).select('-__v').populate('nationality movies', 'name -_id').then((actors) => {
         if (actors) {
             res.status(200).jsonp(actors);
         } else {
-            res.status(404).jsonp("Not found any");
+            res.status(404).jsonp("Not found anyone");
         }
     }).catch((error) => {
         res.status(500).jsonp(error.message);
@@ -48,7 +48,7 @@ ActorController.update = async (req, res, err) => {
         // an option that asks mongoose to return the updated version 
         // of the document instead of the pre-updated one.
         { new: true },
-    ).select('-__v').populate('nationality', 'name -_id').then((actor) => {
+    ).select('-__v').populate('nationality movies', 'name -_id').then((actor) => {
         if (actor) {
             res.status(200).jsonp(actor);
         } else {
@@ -61,7 +61,7 @@ ActorController.update = async (req, res, err) => {
 
 ActorController.delete = async (req, res, err) => {
 
-    await Actor.findByIdAndRemove(req.params.id).select('-__v').populate('nationality', 'name -_id').then((actor) => {
+    await Actor.findByIdAndRemove(req.params.id).select('-__v').populate('nationality movies', 'name -_id').then((actor) => {
         if (actor) {
             res.status(200).jsonp(actor);
         } else {
@@ -93,7 +93,7 @@ ActorController.save = async (req, res, err) => {
                 });
             }
         }
-        var enhanced_actor = await Actor.findById(actor._id).select('-__v').populate('nationality', 'name -_id');
+        var enhanced_actor = await Actor.findById(actor._id).select('-__v').populate('nationality movies', 'name -_id');
         res.status(200).jsonp(enhanced_actor);
     }).catch((error) => {
         res.status(500).jsonp(error.message);

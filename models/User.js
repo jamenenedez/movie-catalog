@@ -8,8 +8,7 @@ var userSchema = new Schema({
      * User Login, used as id to connect between all our platforms.
      */
     login: {
-        type: 'string',
-        //match: /^[a-zA-Z0-9_-]{'+userSchema.login.check.minLength+','+userSchema.login.check.maxLength+'}$/,
+        type: String,
         trim: true,
         required: true,
         notEmpty: true,
@@ -24,7 +23,7 @@ var userSchema = new Schema({
      * User email.
      */
     email: {
-        type: 'string',
+        type: String,
         lowercase: true,
         match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
         required: true,
@@ -40,7 +39,7 @@ var userSchema = new Schema({
      * User private password, the one hashed in SHA512 and stored on the database.
      */
     password: {
-        type: 'string',
+        type: String,
         required: true,
         check: {
             length: 128
@@ -52,12 +51,12 @@ var userSchema = new Schema({
      */
     right: {
         guest: {
-            type: "boolean",
+            type: Boolean,
             default: false,
             required: true
         },
         moderator: {
-            type: "boolean",
+            type: Boolean,
             default: false,
             required: true
         }
@@ -66,7 +65,8 @@ var userSchema = new Schema({
     /**
      * movie qualifications
      */
-    scores: [{ type: Schema.Types.ObjectId, ref: 'Ranking' }]
+    /* scores: [{ type: Schema.Types.ObjectId, ref: 'Ranking' }], */
+    scores: [{ movie: { type: Schema.Types.ObjectId, ref: 'Movie' }, score: { type: Number } }]
 }, { timestamps: true });
 
 userSchema.plugin(uniqueValidator, { message: 'is already taken.' });

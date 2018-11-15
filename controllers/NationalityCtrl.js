@@ -6,8 +6,8 @@ var Director = require("../models/Director");
 const NationalityController = {};
 var url = require('url');
 
-NationalityController.getByID = async (req, res, err) => {
-    await Nationality.findById(req.params.id). select('-__v').populate('actors directors', 'fullname -_id').then((nationality) => {
+NationalityController.details = async (req, res, err) => {
+    await Nationality.findById(req.params.id).select('-__v').populate('actors directors', 'fullname -_id').then((nationality) => {
         if (nationality) {
             res.status(200).jsonp(nationality);
         } else {
@@ -18,7 +18,7 @@ NationalityController.getByID = async (req, res, err) => {
     });
 }
 
-NationalityController.getAllByAttributes = async (req, res, err) => {
+NationalityController.list = async (req, res, err) => {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -26,11 +26,11 @@ NationalityController.getAllByAttributes = async (req, res, err) => {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    await Nationality.find({ $or: [params] }).select('-__v')./* populate('actors directors', 'name -_id'). */then((nationalities) => {
+    await Nationality.find({ $or: [params] }).select('-__v').populate('actors directors', 'fullname -_id').then((nationalities) => {
         if (nationalities) {
             res.status(200).jsonp(nationalities);
         } else {
-            res.status(404).jsonp("Not found any");
+            res.status(404).jsonp("Not found anyone");
         }
     }).catch((error) => {
         res.status(500).jsonp(error.message);
@@ -49,7 +49,7 @@ NationalityController.update = async (req, res, err) => {
         // an option that asks mongoose to return the updated version 
         // of the document instead of the pre-updated one.
         { new: true },
-    ).select('-__v')/* .populate('actors directors', 'name -_id') */.then((actor) => {
+    ).select('-__v').populate('actors directors', 'fullname -_id').then((actor) => {
         if (actor) {
             res.status(200).jsonp(actor);
         } else {
@@ -62,7 +62,7 @@ NationalityController.update = async (req, res, err) => {
 
 NationalityController.delete = async (req, res, err) => {
 
-    await Nationality.findByIdAndRemove(req.params.id).select('-__v')/* .populate('actors directors', 'name -_id') */.then((nationality) => {
+    await Nationality.findByIdAndRemove(req.params.id).select('-__v').populate('actors directors', 'fullname -_id').then((nationality) => {
         if (nationality) {
             res.status(200).jsonp(nationality);
         } else {
@@ -76,8 +76,8 @@ NationalityController.delete = async (req, res, err) => {
 NationalityController.save = async (req, res, err) => {
 
     var nationality = new Nationality(req.body);
-    await nationality.save().then(async () => {        
-        var enhanced_nationality = await Nationality.findById(nationality._id).select('-__v')/* .populate('actors directors', 'name -_id') */;
+    await nationality.save().then(async () => {
+        var enhanced_nationality = await Nationality.findById(nationality._id).select('-__v').populate('actors directors', 'fullname -_id');
         res.status(200).jsonp(enhanced_nationality);
     }).catch((error) => {
         res.status(500).jsonp(error.message);

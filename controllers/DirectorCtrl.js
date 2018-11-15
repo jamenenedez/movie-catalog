@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 var in_array = require('in_array');
 var Director = require("../models/Director");
 var Nationality = require("../models/Nationality");
+var Movie = require("../models/Movie");
 const DirectorController = {};
 var url = require('url');
 
-DirectorController.getByID = async (req, res, err) => {
-    await Director.findById(req.params.id).select('-__v').populate('nationality', 'name -_id').then((director) => {
+DirectorController.details = async (req, res, err) => {
+    await Director.findById(req.params.id).select('-__v').populate('nationality movies', 'name -_id').then((director) => {
         if (director) {
             res.status(200).jsonp(director);
         } else {
@@ -17,7 +18,7 @@ DirectorController.getByID = async (req, res, err) => {
     });
 }
 
-DirectorController.getAllByAttributes = async (req, res, err) => {
+DirectorController.list = async (req, res, err) => {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -25,11 +26,11 @@ DirectorController.getAllByAttributes = async (req, res, err) => {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    await Director.find({ $or: [params] }).select('-__v').populate('nationality', 'name -_id').then((directors) => {
+    await Director.find({ $or: [params] }).select('-__v').populate('nationality movies', 'name -_id').then((directors) => {
         if (directors) {
             res.status(200).jsonp(directors);
         } else {
-            res.status(404).jsonp("Not found any");
+            res.status(404).jsonp("Not found anyone");
         }
     }).catch((error) => {
         res.status(500).jsonp(error.message);
@@ -48,7 +49,7 @@ DirectorController.update = async (req, res, err) => {
         // an option that asks mongoose to return the updated version 
         // of the document instead of the pre-updated one.
         { new: true },
-    ).select('-__v').populate('nationality', 'name -_id').then((director) => {
+    ).select('-__v').populate('nationality movies', 'name -_id').then((director) => {
         if (director) {
             res.status(200).jsonp(director);
         } else {
@@ -61,7 +62,7 @@ DirectorController.update = async (req, res, err) => {
 
 DirectorController.delete = async (req, res, err) => {
 
-    await Director.findByIdAndRemove(req.params.id).select('-__v').populate('nationality', 'name -_id').then((director) => {
+    await Director.findByIdAndRemove(req.params.id).select('-__v').populate('nationality movies', 'name -_id').then((director) => {
         if (director) {
             res.status(200).jsonp(director);
         } else {
@@ -93,7 +94,7 @@ DirectorController.save = async (req, res, err) => {
                 });
             }
         }
-        var enhanced_director = await Director.findById(director._id).select('-__v').populate('nationality', 'name -_id');
+        var enhanced_director = await Director.findById(director._id).select('-__v').populate('nationality movies', 'name -_id');
         res.status(200).jsonp(enhanced_director);
     }).catch((error) => {
         res.status(500).jsonp(error.message);
