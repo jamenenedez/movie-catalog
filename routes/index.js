@@ -11,6 +11,7 @@ var Gender = require('../models/Gender');
 var Category = require('../models/Category');
 var User = require('../models/User');
 var Nationality = require('../models/Nationality');
+const auth = require('../middlewares/auth');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -23,6 +24,9 @@ router.route('/movies/search').get(MovieCtrl.list);
 router.route('/movies/:id').get(MovieCtrl.details);
 router.route('/movies').post(upload.array(), MovieCtrl.save);
 router.route('/movies/:id').put(MovieCtrl.update);
+router.route('/movies/private/', auth, function (req, res) {
+  res.status(200).send({ message: 'Allowed' });
+});
 /* router.route('/movies/:id/scores').put(MovieCtrl.qualify); */
 router.route('/movies/:id').delete(MovieCtrl.delete);
 

@@ -1,9 +1,49 @@
+'use strict'
+
 const mongoose = require('mongoose');
+
 var in_array = require('in_array');
+const service = require('../services');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
 var User = require("../models/User");
 var Movie = require("../models/Movie");
+
 const UserController = {};
 var url = require('url');
+
+UserController.singUp = async (req, res) => {
+    const user = new User({
+        email: req.body.email,
+        displayName: req.body.displayName,
+        password: req.body.password
+    });
+
+    user.save((err) => {
+        if (err) {
+            return res.status(500).send({ message: 'Error while creating user: ${err}' });
+        }
+        return res.status(201).send({ token: service.createToken(user) });
+    });
+}
+
+UserController.signIn = async (req, res) => {
+    User.find({ email: req.body.email }, (error, user) => {
+        if (error) {
+            return res.status(500).send({ message: error });
+        }
+        else if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+
+        req.user = user;
+        res.status(200).send({
+            message: "Successful login",
+            token: service.createToken(user)
+        });
+    });
+}
 
 UserController.details = async (req, res, err) => {
     await User.findById(req.params.id).select('-__v').populate('movies', 'name -_id').then((user) => {
@@ -83,8 +123,6 @@ UserController.save = async (req, res, err) => {
     });
 };
 
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 
 /* usuariocontroller.singup = (req, res) => {
     bcrypt.genSalt(10, function (err, salt) {

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 var actorSchema = new Schema({
     fullname: { type: String },
