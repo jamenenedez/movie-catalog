@@ -8,4 +8,4 @@ var nationalitySchema = new Schema({
     directors: [{ type: Schema.Types.ObjectId, ref: 'Director' }],
 });
 
-module.exports = mongoose.model('Actor', nationalitySchema);
+module.exports = mongoose.model('Nationality', nationalitySchema);

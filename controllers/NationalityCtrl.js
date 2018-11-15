@@ -5,11 +5,11 @@ const NationalityController = {};
 var url = require('url');
 
 NationalityController.getByID = function (req, res, err) {
-    Nationality.findById(req.params.id, function (err, Nationality) {
+    Nationality.findById(req.params.id, function (err, nationality) {
         if (err) {
             res.send(503, err.message);
         } else {
-            res.status(200).jsonp(Nationality);
+            res.status(200).jsonp(nationality);
         }
     });
 }
@@ -22,11 +22,11 @@ NationalityController.getAllByAttributes = function (req, res, err) {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    Nationality.find({ $or: [params] }, function (err, Nationalitys) {
+    Nationality.find({ $or: [params] }, function (err, nationalities) {
         if (err) {
             res.send(503, err.message);
         } else {
-            res.status(200).jsonp(Nationalitys);
+            res.status(200).jsonp(nationalities);
         }
     });
 };
@@ -45,10 +45,10 @@ NationalityController.update = function (req, res, err) {
         { new: true },
 
         // the callback function
-        (err, Nationality) => {
+        (err, nationality) => {
             // Handle any possible database errors
             if (err) return res.status(500).send(err);
-            return res.send(Nationality);
+            return res.send(nationality);
         }
     );
 };
@@ -74,13 +74,13 @@ NationalityController.delete = function (req, res, err) {
 };
 
 NationalityController.save = function (req, res, err) {
-    var Nationality = new Nationality(req.body);
+    var nationality = new Nationality(req.body);
 
-    Nationality.save({}, function (err, Nationality) {
+    nationality.save({}, function (err, nationality) {
         if (err) {
             res.send(503, err.message);
         } else {
-            res.status(200).jsonp(Nationality);
+            res.status(200).jsonp(nationality);
         }
     });
 };

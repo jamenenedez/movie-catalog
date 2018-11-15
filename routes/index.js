@@ -10,6 +10,7 @@ var Director = require('../models/Director');
 var Gender = require('../models/Gender');
 var Category = require('../models/Category');
 var User = require('../models/User');
+var Nationality = require('../models/Nationality');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -64,5 +65,13 @@ router.route('/users/:id').get(UserCtrl.getByID);
 router.route('/users').post(upload.array(), UserCtrl.save);
 router.route('/users/:id').put(UserCtrl.update);
 router.route('/users/:id').delete(UserCtrl.delete);
+
+// User
+var NationalityCtrl = require('../controllers/NationalityCtrl');
+router.route('/nationalities/search').get(NationalityCtrl.getAllByAttributes);
+router.route('/nationalities/:id').get(NationalityCtrl.getByID);
+router.route('/nationalities').post(upload.array(), NationalityCtrl.save);
+router.route('/nationalities/:id').put(NationalityCtrl.update);
+router.route('/nationalities/:id').delete(NationalityCtrl.delete);
 
 module.exports = router;
