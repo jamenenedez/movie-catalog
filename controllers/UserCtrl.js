@@ -13,7 +13,7 @@ var Movie = require("../models/Movie");
 const UserController = {};
 var url = require('url');
 
-UserController.singUp = async (req, res) => {
+/* UserController.singUp = async (req, res) => {
     const user = new User({
         email: req.body.email,
         displayName: req.body.displayName,
@@ -43,7 +43,7 @@ UserController.signIn = async (req, res) => {
             token: service.createToken(user)
         });
     });
-}
+} */
 
 UserController.details = async (req, res, err) => {
     await User.findById(req.params.id).select('-__v').populate('movies', 'name -_id').then((user) => {
@@ -124,17 +124,18 @@ UserController.save = async (req, res, err) => {
 };
 
 
-/* usuariocontroller.singup = (req, res) => {
+Usercontroller.singUp = (req, res) => {
     bcrypt.genSalt(10, function (err, salt) {
-        bcrypt.hash(req.body.contrasena, salt, async function (err, hash) {
+        bcrypt.hash(req.body.password, salt, async function (err, hash) {
             if (err) {
                 res.status(500).json({
                     status: err
                 });
             } else {
-                const user = new usuario({
-                    correo: req.body.correo,
-                    contrasena: hash
+                const user = new User({
+                    login: req.body.login,
+                    email: req.body.correo,
+                    password: hash
                 });
                 await user.save();
                 res.status(201).json({
@@ -145,7 +146,7 @@ UserController.save = async (req, res, err) => {
     });
 }
 
-usuariocontroller.singin = (req, res) => {
+/*usuariocontroller.singin = (req, res) => {
     usuario.findOne({ correo: req.body.correo }, function (err, usuario) {
         if (err) {
             res.status(500).json({

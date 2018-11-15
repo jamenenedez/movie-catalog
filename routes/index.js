@@ -24,9 +24,7 @@ router.route('/movies/search').get(MovieCtrl.list);
 router.route('/movies/:id').get(MovieCtrl.details);
 router.route('/movies').post(upload.array(), MovieCtrl.save);
 router.route('/movies/:id').put(MovieCtrl.update);
-router.route('/movies/private/', auth, function (req, res) {
-  res.status(200).send({ message: 'Allowed' });
-});
+router.route('/movies/private').get(auth.isAuth);
 /* router.route('/movies/:id/scores').put(MovieCtrl.qualify); */
 router.route('/movies/:id').delete(MovieCtrl.delete);
 
