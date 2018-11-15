@@ -1,20 +1,23 @@
 const mongoose = require('mongoose');
 var in_array = require('in_array');
 var Director = require("../models/Director");
+var Nationality = require("../models/Nationality");
 const DirectorController = {};
 var url = require('url');
 
-DirectorController.getByID = function (req, res, err) {
-    Director.findById(req.params.id, function (err, director) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+DirectorController.getByID = async (req, res, err) => {
+    await Director.findById(req.params.id).select('-__v').populate('nationality', 'name -_id').then((director) => {
+        if (director) {
             res.status(200).jsonp(director);
+        } else {
+            res.status(404).jsonp("Not found");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
-};
+}
 
-DirectorController.getAllByAttributes = function (req, res, err) {
+DirectorController.getAllByAttributes = async (req, res, err) => {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -22,16 +25,18 @@ DirectorController.getAllByAttributes = function (req, res, err) {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    Director.find({ $or: [params] }, function (err, directors) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+    await Director.find({ $or: [params] }).select('-__v').populate('nationality', 'name -_id').then((directors) => {
+        if (directors) {
             res.status(200).jsonp(directors);
+        } else {
+            res.status(404).jsonp("Not found any");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
-DirectorController.update = function (req, res, err) {
+DirectorController.update = async (req, res, err) => {
     Director.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -43,45 +48,56 @@ DirectorController.update = function (req, res, err) {
         // an option that asks mongoose to return the updated version 
         // of the document instead of the pre-updated one.
         { new: true },
-
-        // the callback function
-        (err, director) => {
-            // Handle any possible database errors
-            if (err) return res.status(500).send(err);
-            return res.send(director);
+    ).select('-__v').populate('nationality', 'name -_id').then((director) => {
+        if (director) {
+            res.status(200).jsonp(director);
+        } else {
+            res.status(404).jsonp("Not found");
         }
-    );
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
+    });
 };
 
-DirectorController.delete = function (req, res, err) {
-    Director.findById(req.params.id, function (err, director) {
-        if (err) {
-            res.send(503, err.message);
+DirectorController.delete = async (req, res, err) => {
+
+    await Director.findByIdAndRemove(req.params.id).select('-__v').populate('nationality', 'name -_id').then((director) => {
+        if (director) {
+            res.status(200).jsonp(director);
         } else {
-            if (!director) {
-                res.status(404).send();
-            } else {
-                director.remove(function (err, removedDirector) {
-                    if (err) {
-                        res.send(503, err.message);
+            res.status(404).jsonp("Not found");
+        }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
+    });
+};
+
+DirectorController.save = async (req, res, err) => {
+
+    var director = new Director(req.body);
+    await director.save().then(async () => {
+        if (director.nationality != "") {
+            const nationality = await Nationality.findById(director.nationality);
+            nationality.directors.push(director._id);
+            await nationality.save().then().catch(function (error) { res.status(500).jsonp(error.message); });
+        }
+        if (typeof req.body.movies != "undefined") {
+            if (req.body.movies.size < 3 && req.body.movies.size > 0) {
+                director.movies.forEach(movie => {
+                    if (movie.director != "") {
+                        movie.director = req.body.director;
+                        movie.save();
                     } else {
-                        res.send(removedDirector);
+                        res.status(500).jsonp("A director is needed" + movie.name);
                     }
                 });
             }
         }
+        var enhanced_director = await Director.findById(director._id).select('-__v').populate('nationality', 'name -_id');
+        res.status(200).jsonp(enhanced_director);
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
-DirectorController.save = function (req, res, err) {
-    var director = new Director(req.body);
-    director.save({}, function (err, director) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
-            res.status(200).jsonp(director);
-        }
-    });
-};
-
-module.exports = DirectorController;
+module.exports = DirectorController; 

@@ -6,18 +6,18 @@ const ActorController = {};
 var url = require('url');
 
 ActorController.getByID = async (req, res, err) => {
-    await Actor.findById(req.params.id).populate('nationality', 'name -_id').then((actor) => {        
-        if(actor){
+    await Actor.findById(req.params.id).select('-__v').populate('nationality', 'name -_id').then((actor) => {
+        if (actor) {
             res.status(200).jsonp(actor);
-        }else{
+        } else {
             res.status(404).jsonp("Not found");
         }
     }).catch((error) => {
         res.status(500).jsonp(error.message);
-    });    
+    });
 }
 
-ActorController.getAllByAttributes = function (req, res, err) {
+ActorController.getAllByAttributes = async (req, res, err) => {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -25,16 +25,18 @@ ActorController.getAllByAttributes = function (req, res, err) {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    Actor.find({ $or: [params] }, function (err, actors) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+    await Actor.find({ $or: [params] }).select('-__v').populate('nationality', 'name -_id').then((actors) => {
+        if (actors) {
             res.status(200).jsonp(actors);
+        } else {
+            res.status(404).jsonp("Not found any");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
-ActorController.update = function (req, res, err) {
+ActorController.update = async (req, res, err) => {
     Actor.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -46,33 +48,27 @@ ActorController.update = function (req, res, err) {
         // an option that asks mongoose to return the updated version 
         // of the document instead of the pre-updated one.
         { new: true },
-
-        // the callback function
-        (err, actor) => {
-            // Handle any possible database errors
-            if (err) return res.status(500).send(err);
-            return res.send(actor);
+    ).select('-__v').populate('nationality', 'name -_id').then((actor) => {
+        if (actor) {
+            res.status(200).jsonp(actor);
+        } else {
+            res.status(404).jsonp("Not found");
         }
-    );
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
+    });
 };
 
-ActorController.delete = function (req, res, err) {
-    Actor.findById(req.params.id, function (err, actor) {
-        if (err) {
-            res.send(503, err.message);
+ActorController.delete = async (req, res, err) => {
+
+    await Actor.findByIdAndRemove(req.params.id).select('-__v').populate('nationality', 'name -_id').then((actor) => {
+        if (actor) {
+            res.status(200).jsonp(actor);
         } else {
-            if (!actor) {
-                res.status(404).send();
-            } else {
-                actor.remove(function (err, removedActor) {
-                    if (err) {
-                        res.send(503, err.message);
-                    } else {
-                        res.send(removedActor);
-                    }
-                });
-            }
+            res.status(404).jsonp("Not found");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
@@ -80,14 +76,25 @@ ActorController.save = async (req, res, err) => {
 
     var actor = new Actor(req.body);
     await actor.save().then(async () => {
-        const nationality = await Nationality.findById(actor.nationality);
-        nationality.actors.push(actor._id);
-        await nationality.save().then(async () => {
-            const newActor = await Actor.findById(actor._id).populate('nationality', 'name -_id');
-            res.status(200).jsonp(newActor);
-        }).catch(function (error) {
-            res.status(500).jsonp(error.message);
-        });
+        if (actor.nationality != "") {
+            const nationality = await Nationality.findById(actor.nationality);
+            nationality.actors.push(actor._id);
+            await nationality.save().then().catch(function (error) { res.status(500).jsonp(error.message); });
+        }
+        if (typeof req.body.movies != "undefined") {
+            if (req.body.movies.size < 3 && req.body.movies.size > 0) {
+                actor.movies.forEach(movie => {
+                    if (movie.actors.length < 3) {
+                        movie.actors.push(actor._id);
+                        movie.save();
+                    } else {
+                        res.status(500).jsonp("To many actors, just 3 needed for movie " + movie.name);
+                    }
+                });
+            }
+        }
+        var enhanced_actor = await Actor.findById(actor._id).select('-__v').populate('nationality', 'name -_id');
+        res.status(200).jsonp(enhanced_actor);
     }).catch((error) => {
         res.status(500).jsonp(error.message);
     });

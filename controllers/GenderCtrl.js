@@ -1,20 +1,23 @@
 const mongoose = require('mongoose');
 var in_array = require('in_array');
 var Gender = require("../models/Gender");
+var Movie = require("../models/Movie");
 const GenderController = {};
 var url = require('url');
 
-GenderController.getByID = function (req, res, err) {
-    Gender.findById(req.params.id, function (err, gender) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+GenderController.getByID = async (req, res, err) => {
+    await Gender.findById(req.params.id).select('-__v')/* .populate('movies', 'name -_id') */.then((gender) => {
+        if (gender) {
             res.status(200).jsonp(gender);
+        } else {
+            res.status(404).jsonp("Not found");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
-};
+}
 
-GenderController.getAllByAttributes = function (req, res, err) {
+GenderController.getAllByAttributes = async (req, res, err) => {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -22,16 +25,18 @@ GenderController.getAllByAttributes = function (req, res, err) {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    Gender.find({ $or: [params] }, function (err, genders) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+    await Gender.find({ $or: [params] }).select('-__v')/* .populate('movies', 'name -_id') */.then((genders) => {
+        if (genders) {
             res.status(200).jsonp(genders);
+        } else {
+            res.status(404).jsonp("Not found any");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
-GenderController.update = function (req, res, err) {
+GenderController.update = async (req, res, err) => {
     Gender.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -43,46 +48,39 @@ GenderController.update = function (req, res, err) {
         // an option that asks mongoose to return the updated version 
         // of the document instead of the pre-updated one.
         { new: true },
-
-        // the callback function
-        (err, gender) => {
-            // Handle any possible database errors
-            if (err) return res.status(500).send(err);
-            return res.send(gender);
-        }
-    );
-};
-
-GenderController.delete = function (req, res, err) {
-    Gender.findById(req.params.id, function (err, gender) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
-            if (!gender) {
-                res.status(404).send();
-            } else {
-                gender.remove(function (err, removedGender) {
-                    if (err) {
-                        res.send(503, err.message);
-                    } else {
-                        res.send(removedGender);
-                    }
-                });
-            }
-        }
-    });
-};
-
-GenderController.save = function (req, res, err) {
-    var gender = new Gender(req.body);
-
-    gender.save(req.body, function (err, gender) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+    ).select('-__v')/* .populate('movies', 'name -_id') */.then((gender) => {
+        if (gender) {
             res.status(200).jsonp(gender);
+        } else {
+            res.status(404).jsonp("Not found");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
-module.exports = GenderController;
+GenderController.delete = async (req, res, err) => {
+
+    await Gender.findByIdAndRemove(req.params.id)/* .populate('movies', 'name -_id') */.then((gender) => {
+        if (gender) {
+            res.status(200).jsonp(gender);
+        } else {
+            res.status(404).jsonp("Not found");
+        }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
+    });
+};
+
+GenderController.save = async (req, res, err) => {
+
+    var gender = new Gender(req.body);
+    await gender.save().then(async (enhanced_gender) => {
+        var enhanced_gender = await Gender.findById(enhanced_gender._id).select('-__v')/* .populate('movies', 'name -_id') */;
+        res.status(200).jsonp(enhanced_gender);
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
+    });
+};
+
+module.exports = GenderController; 

@@ -1,20 +1,24 @@
 const mongoose = require('mongoose');
 var in_array = require('in_array');
 var Nationality = require("../models/Nationality");
+var Actor = require("../models/Actor");
+var Director = require("../models/Director");
 const NationalityController = {};
 var url = require('url');
 
-NationalityController.getByID = function (req, res, err) {
-    Nationality.findById(req.params.id, function (err, nationality) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+NationalityController.getByID = async (req, res, err) => {
+    await Nationality.findById(req.params.id). select('-__v').populate('actors directors', 'fullname -_id').then((nationality) => {
+        if (nationality) {
             res.status(200).jsonp(nationality);
+        } else {
+            res.status(404).jsonp("Not found");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 }
 
-NationalityController.getAllByAttributes = function (req, res, err) {
+NationalityController.getAllByAttributes = async (req, res, err) => {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -22,16 +26,18 @@ NationalityController.getAllByAttributes = function (req, res, err) {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    Nationality.find({ $or: [params] }, function (err, nationalities) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+    await Nationality.find({ $or: [params] }).select('-__v')./* populate('actors directors', 'name -_id'). */then((nationalities) => {
+        if (nationalities) {
             res.status(200).jsonp(nationalities);
+        } else {
+            res.status(404).jsonp("Not found any");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
-NationalityController.update = function (req, res, err) {
+NationalityController.update = async (req, res, err) => {
     Nationality.findByIdAndUpdate(
         // the id of the item to find
         req.params.id,
@@ -43,45 +49,38 @@ NationalityController.update = function (req, res, err) {
         // an option that asks mongoose to return the updated version 
         // of the document instead of the pre-updated one.
         { new: true },
-
-        // the callback function
-        (err, nationality) => {
-            // Handle any possible database errors
-            if (err) return res.status(500).send(err);
-            return res.send(nationality);
-        }
-    );
-};
-
-NationalityController.delete = function (req, res, err) {
-    Nationality.findById(req.params.id, function (err, Nationality) {
-        if (err) {
-            res.send(503, err.message);
+    ).select('-__v')/* .populate('actors directors', 'name -_id') */.then((actor) => {
+        if (actor) {
+            res.status(200).jsonp(actor);
         } else {
-            if (!Nationality) {
-                res.status(404).send();
-            } else {
-                Nationality.remove(function (err, removedNationality) {
-                    if (err) {
-                        res.send(503, err.message);
-                    } else {
-                        res.send(removedNationality);
-                    }
-                });
-            }
+            res.status(404).jsonp("Not found");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
-NationalityController.save = function (req, res, err) {
-    var nationality = new Nationality(req.body);
+NationalityController.delete = async (req, res, err) => {
 
-    nationality.save({}, function (err, nationality) {
-        if (err) {
-            res.send(503, err.message);
-        } else {
+    await Nationality.findByIdAndRemove(req.params.id).select('-__v')/* .populate('actors directors', 'name -_id') */.then((nationality) => {
+        if (nationality) {
             res.status(200).jsonp(nationality);
+        } else {
+            res.status(404).jsonp("Not found");
         }
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
+    });
+};
+
+NationalityController.save = async (req, res, err) => {
+
+    var nationality = new Nationality(req.body);
+    await nationality.save().then(async () => {        
+        var enhanced_nationality = await Nationality.findById(nationality._id).select('-__v')/* .populate('actors directors', 'name -_id') */;
+        res.status(200).jsonp(enhanced_nationality);
+    }).catch((error) => {
+        res.status(500).jsonp(error.message);
     });
 };
 
