@@ -211,4 +211,12 @@ UserController.list = (req, res) => {
     });
 } */
 
+UserController.qualifyMovies = function (req, res) {
+    User.findOneAndUpdate({ _id: req.user._id }, { $set: { scores: req.body.scores } }, { upsert: true, new: true }, function (err, user) {
+        if (err)
+            return res.status(500).send(err.message);
+        res.status(200).jsonp(user);
+    });
+};
+
 module.exports = UserController; 

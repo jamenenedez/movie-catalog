@@ -63,7 +63,6 @@ var userSchema = new Schema({
     /**
      * movie qualifications
      */
-    /* scores: [{ type: Schema.Types.ObjectId, ref: 'Ranking' }], */
     scores: [{ movie: { type: Schema.Types.ObjectId, ref: 'Movie' }, score: { type: Number } }]
 }, { timestamps: true });
 
