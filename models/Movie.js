@@ -9,6 +9,7 @@ var movieSchema = new Schema({
     year: { type: String },
     country: { type: String },
     duration: { type: Number },
+    calification: { type: Number },
     scores: [{ user: { type: Schema.Types.ObjectId, ref: 'User' }, score: { type: Number } }], //User average qualifications  
     director: { type: Schema.Types.ObjectId, ref: 'Director', required: [true, 'A director must be named'] }, //At least one
     actors: [{ type: Schema.Types.ObjectId, ref: 'Actor', required: [true, 'An actor must be named'] }],   //At least one

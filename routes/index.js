@@ -25,7 +25,7 @@ router.get('/movies/search', MovieCtrl.list);
 router.get('/movies/:id', MovieCtrl.details);
 router.post('/movies', upload.array(), MovieCtrl.save);
 router.put('/movies/:id', MovieCtrl.update);
-router.put('/movies/:id/scores', jwtoken.ensureToken, MovieCtrl.qualify);
+/* router.put('/movies/:id/scores', jwtoken.ensureToken, MovieCtrl.qualify); */
 router.delete('/movies/:id', MovieCtrl.delete);
 
 // Actor
@@ -65,7 +65,9 @@ var UserCtrl = require('../controllers/UserCtrl');
 router.get('/users/search', jwtoken.ensureToken, UserCtrl.list)
 router.get('/users/:id', jwtoken.ensureToken, UserCtrl.details);
 router.post('/users', upload.array(), UserCtrl.save);
-router.put('/users/:id', jwtoken.ensureToken, UserCtrl.update);
+/* router.put('/users/:id', jwtoken.ensureToken, UserCtrl.update); */
+router.put('/users/:id', jwtoken.ensureToken, UserCtrl.edit);
+router.put('/users/:id/movies/scores', jwtoken.ensureToken, UserCtrl.qualifyMovies);
 router.delete('/users/:id', jwtoken.ensureToken, UserCtrl.delete);
 router.post('/users/signUp', UserCtrl.singUp);
 router.post('/users/signIn', UserCtrl.signIn);

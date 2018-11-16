@@ -47,19 +47,19 @@ var userSchema = new Schema({
     /**
      * User right
      */
-    right: {
-        guest: {
+  /*   right: {
+        evaluator: {
             type: Boolean,
             default: false,
             required: true
         },
-        moderator: {
+        admin: {
             type: Boolean,
             default: false,
             required: true
         }
     },
-
+ */
     /**
      * movie qualifications
      */

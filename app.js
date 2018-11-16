@@ -8,18 +8,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var mongoose = require('mongoose');
+var config = require('./config/database');
 
-const URI = 'mongodb+srv://jamenendez:Estudios-*2018@cluster0-7mf0l.mongodb.net/movie_catalog';
-mongoose.connect(URI, { useNewUrlParser: true })
-    .then(db => console.log('Conectado a la Base de Datos'))
-    .catch(error => console.error(error));
 module.exports = mongoose;
-/* 
-mongoose.connect('mongodb://localhost/movies', {useNewUrlParser: true}, function(error, response){
-  if (error) {
-    throw error;
-  }
-}); */
 
 var app = express();
 
@@ -37,12 +28,12 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -51,5 +42,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+mongoose.connect(config.database, { useNewUrlParser: true })
+  .then(db => console.log('Conectado a la Base de Datos'))
+  .catch(error => console.error(error));
 
 module.exports = app;
