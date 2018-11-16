@@ -87,8 +87,35 @@ MovieController.save = async (req, res, err) => {
 };
 
 MovieController.qualify = async (req, res, err) => {
-
-    Movie.findOneAndUpdate
+    Movie.findOneAndUpdate();
+    
+    Ranking.findOneAndUpdate({ movie_id: req.params.id, user_id: req.body.user_id },
+        { $set: { score: req.body.score } }, { upsert: true, new: true },
+        function (err, rank) {
+            if (err) {
+                res.send(503, error.message);
+            }
+            else {
+                Ranking.find({ movie_id: req.params.id }, function (err, ranks) {
+                    var count_users = 0;
+                    var total_score = 0;
+                    ranks.forEach(rank => {
+                        total_score += rank.score;
+                        count_users++;
+                    });
+                    Movie.findByIdAndUpdate(req.params.id, { $set: { score: ((total_score) / (count_users)) } }, 
+                    {new: true},
+                        function (error, movie) {
+                            if (error) {
+                                res.status(503).send(error.message);
+                            } else {
+                                res.status(200).jsonp(movie);
+                            }
+                        });
+                });
+            }
+        }
+    );    
 };
 
 module.exports = MovieController; 

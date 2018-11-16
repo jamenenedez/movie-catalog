@@ -4,6 +4,7 @@ var router = express.Router();
 
 var multer = require('multer');
 var upload = multer();
+const jwtoken = require('../common/token');
 
 var Movie = require('../models/Movie');
 var Actor = require('../models/Actor');
@@ -24,7 +25,7 @@ router.get('/movies/search', MovieCtrl.list);
 router.get('/movies/:id', MovieCtrl.details);
 router.post('/movies', upload.array(), MovieCtrl.save);
 router.put('/movies/:id', MovieCtrl.update);
-/* router.route('/movies/:id/scores').put(MovieCtrl.qualify); */
+router.put('/movies/:id/scores', jwtoken.ensureToken, MovieCtrl.qualify);
 router.delete('/movies/:id', MovieCtrl.delete);
 
 // Actor
@@ -37,51 +38,44 @@ router.delete('/actors/:id', ActorCtrl.delete);
 
 // Director
 var DirectorCtrl = require('../controllers/DirectorCtrl');
-router.route('/directors/search').get(DirectorCtrl.list);
-router.route('/directors/:id').get(DirectorCtrl.details);
-router.route('/directors').post(upload.array(), DirectorCtrl.save);
-router.route('/directors/:id').put(DirectorCtrl.update);
-router.route('/directors/:id').delete(DirectorCtrl.delete);
+router.get('/directors/search', DirectorCtrl.list);
+router.get('/directors/:id', DirectorCtrl.details);
+router.post('/directors', upload.array(), DirectorCtrl.save);
+router.put('/directors/:id', DirectorCtrl.update);
+router.delete('/directors/:id', DirectorCtrl.delete);
 
 // Gender
 var GenderCtrl = require('../controllers/GenderCtrl');
-router.route('/genders/search').get(GenderCtrl.list);
-router.route('/genders/:id').get(GenderCtrl.details);
-router.route('/genders').post(upload.array(), GenderCtrl.save);
-router.route('/genders/:id').put(GenderCtrl.update);
-router.route('/genders/:id').delete(GenderCtrl.delete);
+router.get('/genders/search', GenderCtrl.list);
+router.get('/genders/:id', GenderCtrl.details);
+router.post('/genders', upload.array(), GenderCtrl.save);
+router.put('/genders/:id', GenderCtrl.update);
+router.delete('/genders/:id', GenderCtrl.delete);
 
 // Category
 var CategoryCtrl = require('../controllers/CategoryCtrl');
-router.route('/categories/search').get(CategoryCtrl.list);
-router.route('/categories/:id').get(CategoryCtrl.details);
-router.route('/categories').post(upload.array(), CategoryCtrl.save);
-router.route('/categories/:id').put(CategoryCtrl.update);
-router.route('/categories/:id').delete(CategoryCtrl.delete);
+router.get('/categories/search', CategoryCtrl.list);
+router.get('/categories/:id', CategoryCtrl.details);
+router.post('/categories', upload.array(), CategoryCtrl.save);
+router.put('/categories/:id', CategoryCtrl.update);
+router.delete('/categories/:id', CategoryCtrl.delete);
 
 // User
-const jwtoken = require('../common/token');
 var UserCtrl = require('../controllers/UserCtrl');
 router.get('/users/search', jwtoken.ensureToken, UserCtrl.list)
-/* router.route('/users/search').get(UserCtrl.list); */
-router.route('/users/:id').get(UserCtrl.details);
-router.route('/users').post(upload.array(), UserCtrl.save);
-router.route('/users/:id').put(UserCtrl.update);
-router.route('/users/:id').delete(UserCtrl.delete);
-router.route('/users/signUp').post(UserCtrl.singUp);
-router.route('/users/signIn').post(UserCtrl.signIn);
+router.get('/users/:id', jwtoken.ensureToken, UserCtrl.details);
+router.post('/users', upload.array(), UserCtrl.save);
+router.put('/users/:id', jwtoken.ensureToken, UserCtrl.update);
+router.delete('/users/:id', jwtoken.ensureToken, UserCtrl.delete);
+router.post('/users/signUp', UserCtrl.singUp);
+router.post('/users/signIn', UserCtrl.signIn);
 
-/* router.get('/', jwtoken.ensureToken, usuario.getList);
-router.get('/:id', jwtoken.ensureToken, usuario.details);
-router.put('/:id', jwtoken.ensureToken, usuario.edit);
-router.delete('/:id', jwtoken.ensureToken, usuario.delete); */
-
-// User
+// Nationalities
 var NationalityCtrl = require('../controllers/NationalityCtrl');
-router.route('/nationalities/search').get(NationalityCtrl.list);
-router.route('/nationalities/:id').get(NationalityCtrl.details);
-router.route('/nationalities').post(upload.array(), NationalityCtrl.save);
-router.route('/nationalities/:id').put(NationalityCtrl.update);
-router.route('/nationalities/:id').delete(NationalityCtrl.delete);
+router.get('/nationalities/search', NationalityCtrl.list);
+router.get('/nationalities/:id', NationalityCtrl.details);
+router.post('/nationalities', upload.array(), NationalityCtrl.save);
+router.put('/nationalities/:id', NationalityCtrl.update);
+router.delete('/nationalities/:id', NationalityCtrl.delete);
 
 module.exports = router;
