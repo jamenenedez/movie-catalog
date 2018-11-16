@@ -3,7 +3,6 @@
 const mongoose = require('mongoose');
 
 var in_array = require('in_array');
-const service = require('../services');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -12,38 +11,6 @@ var Movie = require("../models/Movie");
 
 const UserController = {};
 var url = require('url');
-
-/* UserController.singUp = async (req, res) => {
-    const user = new User({
-        email: req.body.email,
-        displayName: req.body.displayName,
-        password: req.body.password
-    });
-
-    user.save((err) => {
-        if (err) {
-            return res.status(500).send({ message: 'Error while creating user: ${err}' });
-        }
-        return res.status(201).send({ token: service.createToken(user) });
-    });
-}
-
-UserController.signIn = async (req, res) => {
-    User.find({ email: req.body.email }, (error, user) => {
-        if (error) {
-            return res.status(500).send({ message: error });
-        }
-        else if (!user) {
-            return res.status(404).send({ message: "User not found" });
-        }
-
-        req.user = user;
-        res.status(200).send({
-            message: "Successful login",
-            token: service.createToken(user)
-        });
-    });
-} */
 
 UserController.details = async (req, res, err) => {
     await User.findById(req.params.id).select('-__v').populate('movies', 'name -_id').then((user) => {
@@ -57,7 +24,7 @@ UserController.details = async (req, res, err) => {
     });
 }
 
-UserController.list = async (req, res, err) => {
+/* UserController.list = async (req, res, err) => {
     var params = {};
     for (key in req.query) {
         // check if the params are corrects for find
@@ -74,7 +41,7 @@ UserController.list = async (req, res, err) => {
     }).catch((error) => {
         res.status(500).jsonp(error.message);
     });
-};
+}; */
 
 UserController.update = async (req, res, err) => {
     User.findByIdAndUpdate(
@@ -123,8 +90,7 @@ UserController.save = async (req, res, err) => {
     });
 };
 
-
-Usercontroller.singUp = (req, res) => {
+UserController.singUp = (req, res, err) => {
     bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(req.body.password, salt, async function (err, hash) {
             if (err) {
@@ -134,7 +100,7 @@ Usercontroller.singUp = (req, res) => {
             } else {
                 const user = new User({
                     login: req.body.login,
-                    email: req.body.correo,
+                    email: req.body.email,
                     password: hash
                 });
                 await user.save();
@@ -146,32 +112,32 @@ Usercontroller.singUp = (req, res) => {
     });
 }
 
-/*usuariocontroller.singin = (req, res) => {
-    usuario.findOne({ correo: req.body.correo }, function (err, usuario) {
+UserController.signIn = (req, res) => {
+    User.findOne({ login: req.body.login }, function (err, user) {
         if (err) {
             res.status(500).json({
                 status: err
             });
-        } else if(usuario === null) {
+        } else if (user === null) {
             res.status(200).json({
                 status: 'Usuario invalido'
             });
         } else {
-            bcrypt.compare(req.body.contrasena, usuario.contrasena, function (err, result) {
+            bcrypt.compare(req.body.password, user.password, function (err, result) {
                 if (result) {
                     const token = jwt.sign({
-                        usuario
-                    }, 'secret_key');
+                        user
+                    }, '6523e58bc0eec42c31b9635d5e0dfc23b6d119b73e633bf3a5284c79bb4a1ede');
                     res.status(200).json({
                         status: true,
-                        menssage: 'Usuario Autenticado',
+                        menssage: 'Authenticated User',
                         token: token,
-                        details: 'Usuario Autenticado Correctamente'
+                        details: 'Correctly authenticated'
                     });
                 } else {
                     res.status(403).json({
                         status: false,
-                        menssage: 'Credenciales incorrectas',
+                        menssage: 'Bad credentials',
                         token: '',
                         details: err
                     });
@@ -181,30 +147,45 @@ Usercontroller.singUp = (req, res) => {
     });
 }
 
-usuariocontroller.getList = (req, res) => {
-    jwt.verify(req.token, 'secret_key', async (err, data) => {
+UserController.list = (req, res) => {
+    jwt.verify(req.token, '6523e58bc0eec42c31b9635d5e0dfc23b6d119b73e633bf3a5284c79bb4a1ede', async (err, user) => {
         if (err) {
             res.status(403).json({
                 error: err
             });
         } else {
-            const usuarios = await usuario.find();
+            var params = {};
+            for (key in req.query) {
+                // check if the params are corrects for find
+                if (in_array(key, Object.keys(User.schema.paths))) {
+                    req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
+                }
+            }
+            await User.find({ $or: [params] }).select('-__v').populate('movies', 'name -_id').then((users) => {
+                if (users) {
+                    res.status(200).jsonp(users);
+                } else {
+                    res.status(404).jsonp("Not found any");
+                }
+            }).catch((error) => {
+                res.status(500).jsonp(error.message);
+            });
+
+            /* const users = await User.find();
             var list = new Array;
-            usuarios.forEach(function(element) {
+            users.forEach(function (user) {
                 list.push({
-                    id: element.id,
-                    correo: element.correo,
-                    rol: element.rol,
-                    puntos: element.puntos,
-                    url: '/api/usuario/' + element.id
+                    id: user.id,
+                    email: user.email,
+                    url: '/api/usuario/' + user.id
                 });
             });
-            res.json(list);
+            res.status(200).jsonp(list); */
         }
     });
 }
 
-usuariocontroller.edit = (req, res) => {
+/*usuariocontroller.edit = (req, res) => {
     jwt.verify(req.token, 'secret_key', async (err, data) => {
         if (err) {
             res.status(403).json({ error: err });

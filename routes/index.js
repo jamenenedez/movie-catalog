@@ -1,4 +1,5 @@
 var express = require('express');
+var app = express();
 var router = express.Router();
 
 var multer = require('multer');
@@ -11,7 +12,6 @@ var Gender = require('../models/Gender');
 var Category = require('../models/Category');
 var User = require('../models/User');
 var Nationality = require('../models/Nationality');
-const auth = require('../middlewares/auth');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -20,21 +20,20 @@ router.get('/', function (req, res, next) {
 
 // Movies
 var MovieCtrl = require('../controllers/MovieCtrl');
-router.route('/movies/search').get(MovieCtrl.list);
-router.route('/movies/:id').get(MovieCtrl.details);
-router.route('/movies').post(upload.array(), MovieCtrl.save);
-router.route('/movies/:id').put(MovieCtrl.update);
-router.route('/movies/private').get(auth.isAuth);
+router.get('/movies/search', MovieCtrl.list);
+router.get('/movies/:id', MovieCtrl.details);
+router.post('/movies', upload.array(), MovieCtrl.save);
+router.put('/movies/:id', MovieCtrl.update);
 /* router.route('/movies/:id/scores').put(MovieCtrl.qualify); */
-router.route('/movies/:id').delete(MovieCtrl.delete);
+router.delete('/movies/:id', MovieCtrl.delete);
 
 // Actor
 var ActorCtrl = require('../controllers/ActorCtrl');
-router.route('/actors/search').get(ActorCtrl.list);
-router.route('/actors/:id').get(ActorCtrl.details);
-router.route('/actors').post(upload.array(), ActorCtrl.save);
-router.route('/actors/:id').put(ActorCtrl.update);
-router.route('/actors/:id').delete(ActorCtrl.delete);
+router.get('/actors/search', ActorCtrl.list);
+router.get('/actors/:id', ActorCtrl.details);
+router.post('/actors', upload.array(), ActorCtrl.save);
+router.put('/actors/:id', ActorCtrl.update);
+router.delete('/actors/:id', ActorCtrl.delete);
 
 // Director
 var DirectorCtrl = require('../controllers/DirectorCtrl');
@@ -61,12 +60,21 @@ router.route('/categories/:id').put(CategoryCtrl.update);
 router.route('/categories/:id').delete(CategoryCtrl.delete);
 
 // User
+const jwtoken = require('../common/token');
 var UserCtrl = require('../controllers/UserCtrl');
-router.route('/users/search').get(UserCtrl.list);
+router.get('/users/search', jwtoken.ensureToken, UserCtrl.list)
+/* router.route('/users/search').get(UserCtrl.list); */
 router.route('/users/:id').get(UserCtrl.details);
 router.route('/users').post(upload.array(), UserCtrl.save);
 router.route('/users/:id').put(UserCtrl.update);
 router.route('/users/:id').delete(UserCtrl.delete);
+router.route('/users/signUp').post(UserCtrl.singUp);
+router.route('/users/signIn').post(UserCtrl.signIn);
+
+/* router.get('/', jwtoken.ensureToken, usuario.getList);
+router.get('/:id', jwtoken.ensureToken, usuario.details);
+router.put('/:id', jwtoken.ensureToken, usuario.edit);
+router.delete('/:id', jwtoken.ensureToken, usuario.delete); */
 
 // User
 var NationalityCtrl = require('../controllers/NationalityCtrl');
