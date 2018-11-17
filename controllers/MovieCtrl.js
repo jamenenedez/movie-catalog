@@ -9,8 +9,12 @@ const MovieController = {};
 var url = require('url');
 
 MovieController.details = async (req, res, err) => {
-    await Movie.findById(req.params.id).select('-__v').populate('movies actors directors categories', 'name -_id').then((movie) => {
-        if (movie) {            
+    await Movie.findById(req.params.id).select('-__v')
+    .populate('actors director', 'fullname -_id')
+    .populate('movies genders country category', 'name -_id')
+    .populate({ path: 'scores.user', populate: { path: 'user' } })
+    .then((movie) => {
+        if (movie) {
             res.status(200).jsonp(movie);
         } else {
             res.status(404).jsonp("Not found");
@@ -28,15 +32,18 @@ MovieController.list = async (req, res, err) => {
             req.query[key] !== "" ? params[key] = new RegExp(req.query[key], "i") : null;
         }
     }
-    await Movie.find({ $or: [params] }).select('-__v').populate('movies actors directors categories', 'name -_id').then((movies) => {
-        if (movies) {
-            res.status(200).jsonp(movies);
-        } else {
-            res.status(404).jsonp("Not found anyone");
-        }
-    }).catch((error) => {
-        res.status(500).jsonp(error.message);
-    });
+    await Movie.find({ $or: [params] }).select('-__v')
+        .populate('actors director', 'fullname -_id')
+        .populate('movies genders country category', 'name -_id')
+        .populate({ path: 'scores.user', populate: { path: 'user' } }).then((movies) => {
+            if (movies) {
+                res.status(200).jsonp(movies);
+            } else {
+                res.status(404).jsonp("Not found anyone");
+            }
+        }).catch((error) => {
+            res.status(500).jsonp(error.message);
+        });
 };
 
 MovieController.update = async (req, res, err) => {
@@ -51,35 +58,46 @@ MovieController.update = async (req, res, err) => {
         // an option that asks mongoose to return the updated version 
         // of the document instead of the pre-updated one.
         { new: true },
-    ).select('-__v').populate('movies actors directors categories', 'name -_id').then((movie) => {
-        if (movie) {
-            res.status(200).jsonp(movie);
-        } else {
-            res.status(404).jsonp("Not found");
-        }
-    }).catch((error) => {
-        res.status(500).jsonp(error.message);
-    });
+    ).select('-__v')
+        .populate('actors director', 'fullname -_id')
+        .populate('movies genders country category', 'name -_id')
+        .populate({ path: 'scores.user', populate: { path: 'user' } })
+        .then((movie) => {
+            if (movie) {
+                res.status(200).jsonp(movie);
+            } else {
+                res.status(404).jsonp("Not found");
+            }
+        }).catch((error) => {
+            res.status(500).jsonp(error.message);
+        });
 };
 
 MovieController.delete = async (req, res, err) => {
 
-    await Movie.findByIdAndRemove(req.params.id).populate('movies actors directors categories', 'name -_id').then((movie) => {
-        if (movie) {
-            res.status(200).jsonp(movie);
-        } else {
-            res.status(404).jsonp("Not found");
-        }
-    }).catch((error) => {
-        res.status(500).jsonp(error.message);
-    });
+    await Movie.findByIdAndRemove(req.params.id)
+        .populate('actors director', 'fullname -_id')
+        .populate('movies genders country category', 'name -_id')
+        .populate({ path: 'scores.user', populate: { path: 'user' } })
+        .then((movie) => {
+            if (movie) {
+                res.status(200).jsonp(movie);
+            } else {
+                res.status(404).jsonp("Not found");
+            }
+        }).catch((error) => {
+            res.status(500).jsonp(error.message);
+        });
 };
 
 MovieController.save = async (req, res, err) => {
 
     var movie = new Movie(req.body);
     await movie.save().then(async (enhanced_movie) => {
-        var enhanced_movie = await Movie.findById(enhanced_movie._id).select('-__v').populate('movies actors directors categories', 'name -_id');
+        var enhanced_movie = await Movie.findById(enhanced_movie._id).select('-__v')
+            .populate('actors director', 'fullname -_id')
+            .populate('movies genders country category', 'name -_id')
+            .populate({ path: 'scores.user', populate: { path: 'user' } });
         res.status(200).jsonp(enhanced_movie);
     }).catch((error) => {
         res.status(500).jsonp(error.message);
