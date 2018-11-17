@@ -183,7 +183,7 @@ UserController.qualifyMovies = async (req, res) => {
                 user.scores.push({ movie: req.params.movie_id, score: req.body.score });
             }
         } else {
-            user.scores.pu({ movie: req.params.movie_id, score: req.body.score });
+            user.scores.push({ movie: req.params.movie_id, score: req.body.score });
         }
 
         var updated_user = await user.save();
