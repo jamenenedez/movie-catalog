@@ -10,7 +10,7 @@ var url = require('url');
 
 MovieController.details = async (req, res, err) => {
     await Movie.findById(req.params.id).select('-__v').populate('movies actors directors categories', 'name -_id').then((movie) => {
-        if (movie) {
+        if (movie) {            
             res.status(200).jsonp(movie);
         } else {
             res.status(404).jsonp("Not found");
@@ -85,9 +85,5 @@ MovieController.save = async (req, res, err) => {
         res.status(500).jsonp(error.message);
     });
 };
-
-MovieController.qualify = async (req, res, err) => {
-    Movie.findOneAndUpdate();
-    };
 
 module.exports = MovieController; 

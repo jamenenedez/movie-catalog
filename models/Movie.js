@@ -7,7 +7,7 @@ var movieSchema = new Schema({
     category: { type: Schema.Types.ObjectId, required: [true, 'A category must be named'] }, //Just one
     genders: [{ type: Schema.Types.ObjectId, required: [true, 'A gender must be named'] }], //At least one
     year: { type: String },
-    country: { type: String },
+    country: { type: Schema.Types.ObjectId, ref: 'Country' },
     duration: { type: Number },
     calification: { type: Number },
     scores: [{ user: { type: Schema.Types.ObjectId, ref: 'User' }, score: { type: Number } }], //User average qualifications  

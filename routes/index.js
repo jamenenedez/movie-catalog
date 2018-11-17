@@ -13,6 +13,7 @@ var Gender = require('../models/Gender');
 var Category = require('../models/Category');
 var User = require('../models/User');
 var Nationality = require('../models/Nationality');
+var Country = require('../models/Country');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -67,7 +68,7 @@ router.get('/users/:id', jwtoken.ensureToken, UserCtrl.details);
 router.post('/users', upload.array(), UserCtrl.save);
 /* router.put('/users/:id', jwtoken.ensureToken, UserCtrl.update); */
 router.put('/users/:id', jwtoken.ensureToken, UserCtrl.edit);
-router.put('/users/:id/movies/scores', jwtoken.ensureToken, UserCtrl.qualifyMovies);
+router.put('/users/:id/movies/:movie_id/scores', UserCtrl.qualifyMovies);
 router.delete('/users/:id', jwtoken.ensureToken, UserCtrl.delete);
 router.post('/users/signUp', UserCtrl.singUp);
 router.post('/users/signIn', UserCtrl.signIn);
@@ -79,5 +80,13 @@ router.get('/nationalities/:id', NationalityCtrl.details);
 router.post('/nationalities', upload.array(), NationalityCtrl.save);
 router.put('/nationalities/:id', NationalityCtrl.update);
 router.delete('/nationalities/:id', NationalityCtrl.delete);
+
+// Country
+var CountryCtrl = require('../controllers/CountryCtrl');
+router.get('/countries/search', CountryCtrl.list);
+router.get('/countries/:id', CountryCtrl.details);
+router.post('/countries', upload.array(), CountryCtrl.save);
+router.put('/countries/:id', CountryCtrl.update);
+router.delete('/countries/:id', CountryCtrl.delete);
 
 module.exports = router;

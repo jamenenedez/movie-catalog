@@ -167,37 +167,58 @@ UserController.edit = (req, res) => {
 }
 
 UserController.qualifyMovies = async (req, res) => {
-    User.findById(req.params.id).then(async (error, user) => {
-        //Updating user scores.
-        req.body.scores.forEach(movie_score => {
-            user.scores.forEach(user_score => {
-                if (movie_score.movie == user_score.movie) {
-                    user_score.score = movie_score.score;
-                } else {
-                    user_score.create(movie_score);
+
+    var user = await User.findById(req.params.id).exec();
+
+    if (user) {
+        if (user.scores.length > 0) {
+            var found = false;
+            user.scores.forEach(calification => {
+                if (calification.movie.equals(req.params.movie_id)) {
+                    calification.score = req.body.score;
+                    found = true;
                 }
             });
-        });
+            if (!found) {
+                user.scores.push({ movie: req.params.movie_id, score: req.body.score });
+            }
+        } else {
+            user.scores.pu({ movie: req.params.movie_id, score: req.body.score });
+        }
 
-        user = await user.save();
+        var updated_user = await user.save();
 
-        //Updating movies scores.
-        user.scores.forEach(user_score => {
-            req.body.scores.forEach(movie_score => {
-                Movie.findById(movie_score.movie).then((error, movie) => {
-                    movie.scores.forEach(inner_user_score => {
-                        if (inner_user_score.user == user._id) {
-                            inner_user_score.score = movie_score.score;
-                        } else {
-                            inner_user_score.create(user_score);
+        if (updated_user) {
+            var movie = await Movie.findById(req.params.movie_id).exec();
+            var total_score = 0;
+            if (movie != null) {
+                /* if (movie.scores != null) { */
+                    if (movie.scores.length > 0) {
+                        var found = false;
+                        movie.scores.forEach(calification => {
+                            if (calification.user.equals(req.params.id)) {
+                                calification.score = req.body.score;
+                                found = true;
+                            }
+                        });
+                        if (!found) {
+                            movie.scores.push({ user: req.params.id, score: req.body.score });
                         }
+                    } else {
+                        movie.scores.push({ user: req.params.id, score: req.body.score });
+                    }
+                    movie.scores.forEach(calification => {
+                        total_score += calification.score;
                     });
-                    movie.save().then(() => { });
-                });
-            });
-        });
-
-        res.status(200).jsonp(user);
-    });
+                    movie.calification = total_score/movie.scores.length;
+                /* } */
+                /* else {
+                    movie.scores.push({ user: req.params.id, score: req.body.score });
+                } */
+            }
+            var updated_movie = await movie.save();
+            res.status(200).jsonp(updated_user);
+        }
+    }
 }
 module.exports = UserController; 
