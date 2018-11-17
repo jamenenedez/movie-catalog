@@ -1,0 +1,223 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+	<div id="navbar" class="collapse navbar-collapse" id="navbarTogglerDemo01">	
+		<a class="navbar-brand mr-0 mr-md-2" href="#!/home"><img class="img" src="./images/logoBlanco.png" alt="" width="40" height="36"> Taller de Ciencia para Jóvenes 2018</a>
+		<ul class="navbar-nav mr-auto">
+    	<li class="nav-item">
+        <a class="nav-link" href="#!/home"><i class="fas fa-home"></i>&nbsp;Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#!/solicitudes"><i class="fas fa-file-alt"></i>&nbsp;Solicitudes</a>
+      </li> 
+      <li class="nav-item">
+        <a class="nav-link" href="#!/evaluadores"><i class="fab fa-black-tie"></i>&nbsp;Evaluadores</a>
+      </li> 
+    </ul>
+    <span class="navbar-nav dropdown">
+      <a class="nav-link dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <strong>{{userName}}</strong>&nbsp;<span class="caret"></span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="#!/signout"><i class="fas fa-sign-out-alt"></i>&nbsp;Cerrar sesión</a>
+      </div>
+    </span>
+	</div>
+</nav>
+<header class="d-flex flex-column flex-md-row align-items-md-center p-4 bg-light">
+  <div class="pt-md-3 pb-md-4">
+    <h1 class="bd-title mt-0"><i class="fas fa-user"></i>&nbsp;{{userRegistro.solicitudCompleta.nombre}}&nbsp;{{userRegistro.solicitudCompleta.aPaterno}}&nbsp;{{userRegistro.solicitudCompleta.aMaterno}}</h1>
+  </div>
+</header>
+<main class="container" role="main">
+	<br>
+  <div class="row  justify-content-md-center">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">Promedio: <span class="text-primary">{{(userRegistro.evaluador1.value+userRegistro.evaluador2.value+userRegistro.evaluador3.value)/3 | number:2}}</span></h2>
+          <div class="progress">
+            <div class="progress-bar" style="width: {{userRegistro.evaluador1.value*2}}%" role="progressbar" aria-valuenow="{{userRegistro.evaluador1.value}}" aria-valuemin="0" aria-valuemax="50">{{userRegistro.evaluador1.value}}</div>
+          </div>
+          <p class="card-text">{{userRegistro.evaluador1.id.nombreCompleto}}</p>
+          
+          <div class="progress">
+            <div class="progress-bar" style="width: {{userRegistro.evaluador2.value*2}}%" role="progressbar" aria-valuenow="{{userRegistro.evaluador2.value}}" aria-valuemin="0" aria-valuemax="50">{{userRegistro.evaluador2.value}}</div>
+          </div>
+          <p class="card-text">{{userRegistro.evaluador2.id.nombreCompleto}}</p>
+    
+          <div class="progress">
+            <div class="progress-bar" style="width: {{userRegistro.evaluador3.value*2}}%" role="progressbar" aria-valuenow="{{userRegistro.evaluador3.value}}" aria-valuemin="0" aria-valuemax="50">{{userRegistro.evaluador3.value}}</div>
+          </div>
+          <p class="card-text">{{userRegistro.evaluador3.id.nombreCompleto}}</p>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div id="accordion">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <i class="fas fa-address-card fa-lg"></i>&nbsp;Datos personales
+          </button>
+        </h5>
+      </div>
+
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+          <p class="card-text"><strong>Nombre:</strong>&nbsp;{{userRegistro.solicitudCompleta.nombre}}&nbsp;{{userRegistro.solicitudCompleta.aPaterno}}&nbsp;{{userRegistro.solicitudCompleta.aMaterno}}</p>
+          <p class="card-text"><strong>Género:</strong>&nbsp;{{userRegistro.solicitudCompleta.genero}}</p>
+          <p class="card-text"><strong>Fecha de Nacimiento:</strong>&nbsp;{{userRegistro.solicitudCompleta.fechaNacimiento}}</p>
+          <p class="card-text"><strong>Lugar de Nacimiento:</strong>&nbsp;{{userRegistro.solicitudCompleta.estadoOrigen.name}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <i class="far fa-address-book fa-lg"></i>&nbsp;Datos Contacto
+          </button>
+        </h5>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+        <div class="card-body">
+          <p class="card-text"><strong>Calle:</strong>&nbsp;{{userRegistro.solicitudCompleta.calle}}</p>
+          <p class="card-text"><strong>Número:</strong>&nbsp;{{userRegistro.solicitudCompleta.numExt}}</p>
+          <p class="card-text" ng-if="userRegistro.solicitudCompleta.numInt"><strong>No.interior:</strong>&nbsp;{{userRegistro.solicitudCompleta.numInt}}</p>
+          <p class="card-text"><strong>Colonia:</strong>&nbsp;{{userRegistro.solicitudCompleta.colonia}}</p>
+          <p class="card-text"><strong>Ciudad:</strong>&nbsp;{{userRegistro.solicitudCompleta.ciudad}}</p>
+          <p class="card-text"><strong>Estado:</strong>&nbsp;{{userRegistro.solicitudCompleta.estadoContacto.name}}</p>
+          <p class="card-text"><strong>Código Postal:</strong>&nbsp;{{userRegistro.solicitudCompleta.CP}}</p>
+          <p class="card-text"><strong>Télefono Casa:</strong>&nbsp;{{userRegistro.solicitudCompleta.telefono}}</p>
+          <p class="card-text"><strong>Télefono Celular:</strong>&nbsp;{{userRegistro.solicitudCompleta.celular}}</p>    
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingThree">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            <i class="fas fa-graduation-cap fa-lg"></i>&nbsp;Datos Escolares
+          </button>
+        </h5>
+      </div>
+      <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+          <p class="card-text"><strong>Escuela:</strong>&nbsp;{{userRegistro.solicitudCompleta.nombreEscuela}}</p>
+          <p class="card-text"><strong>Dirección:</strong>&nbsp;{{userRegistro.solicitudCompleta.direccionEscuela}}</p>
+          <p class="card-text"><strong>Teléfono:</strong>&nbsp;{{userRegistro.solicitudCompleta.telEscuela}}</p>
+          <p class="card-text"><strong>Nombre del Director:</strong>&nbsp;{{userRegistro.solicitudCompleta.nombreDirector}}</p>
+          <p class="card-text"><strong>Nombre de un Profesor:</strong>&nbsp;{{userRegistro.solicitudCompleta.nombreProfesor}}</p>
+          <p class="card-text"><strong>Año de Ingreso:</strong>&nbsp;{{userRegistro.solicitudCompleta.anioIngreso}}</p>
+          <p class="card-text"><strong>Semestre:</strong>&nbsp;{{userRegistro.solicitudCompleta.semestre}}°</p>
+          <p class="card-text"><strong>Promedio:</strong>&nbsp;{{userRegistro.solicitudCompleta.promedio}}</p>
+          
+            <p class="card-text" ng-if="userRegistro.solicitudCompleta.participacionOAC"><strong>¿Has participado en otras actividades científicas?</strong>&nbsp;Si</p>
+            <p class="card-text" ng-if="userRegistro.solicitudCompleta.participacionOAC"><strong>Descripción actividades:</strong>&nbsp;{{userRegistro.solicitudCompleta.descripcionOAC}}</p>
+          
+          <p class="card-text" ng-if="!userRegistro.solicitudCompleta.participacionOAC"><strong>¿Has participado en otras actividades científicas?</strong>&nbsp;No</p> 
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingFour">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+            <i class="fab fa-react fa-lg"></i>&nbsp;Taller
+          </button>
+        </h5>
+      </div>
+
+      <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+        <div class="card-body">
+          
+            <p class="card-text" ng-if="userRegistro.solicitudCompleta.interesCCT"><strong>¿Has pensado en estudiar alguna carrera científica o tecnológica?</strong>&nbsp;Si</p>
+            <p class="card-text" ng-if="userRegistro.solicitudCompleta.interesCCT"><strong>¿Cuál(es)?</strong>&nbsp;{{userRegistro.solicitudCompleta.nombreCarreraC}}</p>
+          
+          <p class="card-text" ng-if="!userRegistro.solicitudCompleta.interesCCT"><strong>¿Has pensado en estudiar alguna carrera científica o tecnológica?</strong>&nbsp;No</p> 
+          
+         
+            <p class="card-text" ng-if="userRegistro.solicitudCompleta.interesCiencia"><strong>¿Te interesa aprender más sobre la ciencia?</strong>&nbsp;Si</p>
+            <p class="card-text" ng-if="userRegistro.solicitudCompleta.interesCiencia"><strong>¿Cómo qué? </strong>&nbsp;{{userRegistro.solicitudCompleta.comoCiencia}}</p>
+            <p class="card-text" ng-if="userRegistro.solicitudCompleta.interesCiencia"><strong>¿Por qué? </strong>&nbsp;{{userRegistro.solicitudCompleta.porqueCiencia}}</p>
+          
+          <p class="card-text" ng-if="!userRegistro.solicitudCompleta.interesCiencia"><strong>¿Te interesa aprender más sobre la ciencia?</strong>&nbsp;No</p>
+          <p class="card-text"><strong>¿Cómo te enteraste del taller?</strong>&nbsp;{{userRegistro.solicitudCompleta.conocimientoTaller}}</p> 
+
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingFive">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+            <i class="fas fa-pencil-alt fa-lg"></i>&nbsp;Cursos
+          </button>
+        </h5>
+      </div>
+      <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+        <div class="card-body">
+          <p class="card-text"><strong>Prioridades: </strong></p>
+           <p class="card-text" ng-repeat="curso in userRegistro.solicitudCompleta.cursos.lists.Prioridades">{{$index+1}}.&nbsp;{{curso.label}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingsix">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+            <i class="fas fa-flask fa-lg"></i>&nbsp;Prácticas
+          </button>
+        </h5>
+      </div>
+      <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+        <div class="card-body">
+          <div class="card-body">
+          <p class="card-text"><strong>Prioridades: </strong></p>
+           <p class="card-text" ng-repeat="practica in userRegistro.solicitudCompleta.practicas.lists.Prioridades">{{$index+1}}.&nbsp;{{practica.label}}</p>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingSeven">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+            <i class="fas fa-cogs fa-lg"></i>&nbsp;Composición
+          </button>
+        </h5>
+      </div>
+      <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordion">
+        <div class="card-body">
+          <p class="card-text"><strong>Para ti, ¿qué es la ciencia?</strong>&nbsp;</p>
+          <p class="card-text text-justify">{{userRegistro.solicitudCompleta.queEsCiencia}}</p> 
+          <p class="card-text"><strong>¿Por qué te debemos invitar al taller? ¿Qué puedes dar al grupo y que puedes aprender de él?</strong>&nbsp;</p>
+          <p class="card-text text-justify">{{userRegistro.solicitudCompleta.aporte}}</p> 
+          <p class="card-text"><strong>En tu opinión, ¿cuál será el papel de la ciencia en el desarrollo de México? </strong>&nbsp;</p>
+          <p class="card-text text-justify">{{userRegistro.solicitudCompleta.opinion}}</p> 
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingEight">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+            <i class="far fa-file-alt fa-lg"></i>&nbsp;Archivos
+          </button>
+        </h5>
+      </div>
+      <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#accordion">
+        <div class="card-body">
+          <p class="card-text"><strong>Forma de autorización: </strong>&nbsp; <a class="btn btn-outline-danger" href="http://numenor.cicese.mx/uploads/{{userRegistro.solicitudCompleta.archivoAutorizacion}}" target="_blank" role="button">Mostrar <i class="fas fa-file-pdf fa-lg"></i></a></p>
+          <p class="card-text"><strong>Identificación Tutor: </strong>&nbsp; <a class="btn btn-outline-danger" href="http://numenor.cicese.mx/uploads/{{userRegistro.solicitudCompleta.archivoIdentificacion}}" target="_blank" role="button">Mostrar <i class="far fa-file-pdf fa-lg"></i></a></p>
+           
+        </div>
+      </div>
+    </div>
+  </div>   
+</main>

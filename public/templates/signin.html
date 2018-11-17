@@ -1,0 +1,60 @@
+<link rel="stylesheet" type="text/css" href="/css/signin.css">
+<div class="signin-container">
+  <form name="formSignIn" class="form-signin text-center">
+    <img class="mb-4" src="./images/logo.png" alt="" width="205" height="192">
+    <div class="alert alert-{{alert.type}} alert-dismissible fade show text-left"  role="alert" ng-repeat="alert in alerts">
+      {{alert.msg}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <label for="inputEmail" class="sr-only">Correo electrónico</label>
+    <input type="email" id="inputEmail" class="form-control" placeholder="Correo electrónico" required autofocus ng-model="userLogin.name" ng-change="validacionSignIn()">
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required ng-model="userLogin.password" ng-change="validacionSignIn()">
+    <!--<div vc-recaptcha tabindex="3" theme="clean" key="model.key">{{model.key}} asdad</div>-->
+     <div vc-recaptcha tabindex="3" theme="clean" key="model.key" on-create="setWidgetId(widgetId)" on-success="setResponse(response)" on-expire="cbExpiration()" lang="es"></div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="!formSignIn.$valid" ng-click="iniciarSesion()">Iniciar sesión</button>
+    <!--<div class="text-right">
+      <br>
+      <span class="text-secondary">¿No tienes cuenta?</span><button type="button" class="btn btn-link" data-toggle="modal" data-target="#modalRegistro" ng-click="limpiarSiginUp()">Regístrate</button>
+    </div>-->
+    <p class="mt-5 mb-3 text-muted">CICESE &copy; 2018</p>
+  </form>
+
+</div>
+
+<!-- Modal -->
+<!--
+<div class="modal fade" id="modalRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Registro</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form name="formSignUp">
+          <div class="form-group">
+            <label>Correo electrónico <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" placeholder="Correo electrónico" ng-model="usuario.name" required ng-change="validacionSignUp()">
+          </div>
+          <div class="form-group">
+            <label >Password <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" ng-model="usuario.password" ng-change="validacionSignUp()" required>
+          </div>
+          <div class="form-group">
+            <label >Reingresa password <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" ng-model="repassUp" ng-change="validacionSignUp()" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" ng-disabled="!signupValid" ng-click="registrarUsuario()">Registrar</button>
+      </div>
+    </div>
+  </div>
+</div> -->

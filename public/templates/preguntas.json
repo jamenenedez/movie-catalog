@@ -1,0 +1,45 @@
+{
+	"type":"birthplace",
+	"uttrances":[
+		{
+			"text":"{{persona.name}}, tu eres de {{persona.places.birthplace}} ¿verdad?",
+		},
+		{
+			"text":"Las personas en {{persona.places.birthplace}} son muy alegres ¿verdad {{persona.name}}?",
+		}
+	]
+}
+
+{
+	"type":"music",
+	"uttrances":[
+		{
+			"type":"play_favorite",
+			"text":"{{persona.name}}, Vamos a esuchar la de  {{persona.favorite_songs.song1.name}} de {{persona.favorite_songs.song1.artist}}",
+			"response_type":"null"
+		},
+		{
+			"type":"select_between_two_songs",
+			"text":"{{persona.name}}, ¿Que canción quieres escuchar, {{persona.favorite_songs.name}} o {{persona.favorite_songs.song2.name}}?",
+			"response_type":"selection"
+		},
+		{
+			"type":"select_between_two_artists",
+			"text":"{{persona.name}}, ¿Te gustaría escuchar a {{persona.favorite_songs.song1.artist}} o a {{persona.favorite_songs.song2.artist}}?",
+			"response_type":"selection"
+		},
+		{
+			"type":"ask_song_from_artistX",
+			"text":"{{persona.name}}, ¿Qué canción de {{persona.favorite_songs.song1.artist}}  te gustaría escuchar?}}",
+			"response_type":"selection"
+		},
+		{
+			"type":"ask_song",
+			"text":"¿Que canción te gustaría escuchar?",
+			"response_type":"selection"
+		}
+	]
+}
+
+"response_type":"critical"
+"response_type":"wait_for_answer"
