@@ -21,7 +21,7 @@
 </nav>
 <header class="d-flex flex-column flex-md-row align-items-md-center p-4 bg-light">
   <div class="pt-md-3 pb-md-4">
-    <h1 class="bd-title mt-0"><i class="fab fa-black-tie"></i>&nbsp; Evaluadores</h1>
+    <h1 class="bd-title mt-0"><i class="fab fa-black-tie"></i>&nbsp; Useres</h1>
   </div>
 </header>
 <main class="container" role="main">
@@ -34,7 +34,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <h4><i class="fas fa-user-plus"></i>&nbsp;Nuevo Evaluador</h4>
+      <h4><i class="fas fa-user-plus"></i>&nbsp;Nuevo User</h4>
       <form name="formSignUp">
         <div class="form-group">
           <label>Nombre completo <span class="text-danger">*</span></label>
@@ -54,7 +54,7 @@
           <input type="password" class="form-control" ng-model="repass" ng-change="validacionSignUp()" required>
         </div>
       </form>
-      <button type="button" class="btn btn-success btn-block" ng-disabled="!(formSignUp.$valid && signupValid)" ng-click="registrarEvaluador()"><i class="far fa-save"></i>&nbsp;Guardar</button>
+      <button type="button" class="btn btn-success btn-block" ng-disabled="!(formSignUp.$valid && signupValid)" ng-click="registrarUser()"><i class="far fa-save"></i>&nbsp;Guardar</button>
     </div>
   </div>
   <hr>
@@ -78,7 +78,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="e in evaluators | filter:searchText">
+        <tr ng-repeat="e in users | filter:searchText">
           <td scope="row">{{e.name}}</td>
           <td scope="row">{{e.nombreCompleto}}</td>
 					<td scope="row"> <button type="button" class="btn btn-sm btn-outline-danger" ng-click="eliminarRegistro(e)"><i class="fas fa-user-times"></i></button></td>

@@ -7,13 +7,13 @@
 		$routeProvider
 			.when('/home',{
 				templateUrl:'/templates/evaluadores.html',
-        controller:'EvaluadorCtrl',
+        controller:'UserCtrl',
 				resolve:{
-					cargar: function($q,$location,Evaluator){
+					cargar: function($q,$location,User){
 						var deferred = $q.defer();
-						Evaluator.getEvaluators()
+						User.getUsers()
 						.then(function(res){
-							Evaluator.evaluators = res.data;
+							User.users = res.data;
 							deferred.resolve();
 						},function(res){
 							console.log('Error: '+res);

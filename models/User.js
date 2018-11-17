@@ -48,7 +48,7 @@ var userSchema = new Schema({
      * User right
      */
   /*   right: {
-        evaluator: {
+        user: {
             type: Boolean,
             default: false,
             required: true

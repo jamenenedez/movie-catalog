@@ -1,11 +1,55 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<!doctype html>
+<html ng-app="appTallerCiencia" lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Adimistración Taller de Ciencia</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico in the root directory -->
+    		<link rel="stylesheet" type="text/css" href="/lib/bootstrap/dist/css/bootstrap.min.css">
+    		<link rel="stylesheet" type="text/css" href="/lib/font-awesome/web-fonts-with-css/css/fontawesome-all.min.css">
+    		<link rel="stylesheet" type="text/css" href="/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">
+    		<link rel="stylesheet" type="text/css" href="/css/style.css">
+    		<link rel="stylesheet" type="text/css" href="/lib/angucomplete-alt/angucomplete-alt.css">
+    </head>
+    <body>
+        <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+
+		    <main id="content" role="main" ng-view></main>
+
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
+
+        <script src="/lib/angular/angular.min.js"></script>
+
+        <script src="/lib/angular-route/angular-route.min.js"></script>
+    		<script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
+    		<script src="/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    		<script src="/lib/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js"></script>
+    		<script type="text/javascript" src="/lib/angucomplete-alt/angucomplete-alt.js"></script>
+    		<script type="text/javascript" src="/lib/angular-telephone-filter/dist/angular-telephone-filter.min.js"></script>
+    		<script type="text/javascript" src="/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+            <script type="text/javascript" src="/lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+            <!--<script src='https://www.google.com/recaptcha/api.js'></script>-->
+
+            <script type="text/javascript" src="/lib/angular-recaptcha/release/angular-recaptcha.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/satellizer/0.15.5/satellizer.min.js"></script>
+
+    		<!-- Scripts de la app -->
+            <script src="/js/models/evaluatorModel.js"></script>
+    		<script src="/js/controllers/adminCtrl.js"></script>
+    		<script src="/js/angularApp.js"></script>
+        <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+        <script>
+            window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+            ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
+        </script>
+        <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+    </body>
 </html>

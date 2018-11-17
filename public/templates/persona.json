@@ -8,14 +8,14 @@
         "artist": "Agustín Lara",
         "played": 5,
         "proposed": 8,
-        "sang": 5, 
+        "sang": 5 
       },
       {
         "name": "El rey",
         "artist": "José Alfredo Jiménez",
         "played": 2,
         "proposed": 4,
-        "sang": 1,
+        "sang": 1
       },
       {
         "id_song": 1672,
@@ -23,7 +23,7 @@
         "artist": "José Alfredo Jiménez",
         "played": 2,
         "proposed": 6,
-        "sang": 2,
+        "sang": 2
       }
     ]
   },
