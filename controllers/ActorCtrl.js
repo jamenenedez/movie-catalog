@@ -76,7 +76,7 @@ ActorController.save = async (req, res, err) => {
 
     var actor = new Actor(req.body);
     await actor.save().then(async () => {
-        if (actor.nationality != "") {
+        /* if (actor.nationality != "") {
             const nationality = await Nationality.findById(actor.nationality);
             nationality.actors.push(actor._id);
             await nationality.save().then().catch(function (error) { res.status(500).jsonp(error.message); });
@@ -92,7 +92,7 @@ ActorController.save = async (req, res, err) => {
                     }
                 });
             }
-        }
+        } */
         var enhanced_actor = await Actor.findById(actor._id).select('-__v').populate('nationality movies', 'name -_id');
         res.status(200).jsonp(enhanced_actor);
     }).catch((error) => {
