@@ -20,7 +20,8 @@ export class ActorComponent implements OnInit {
   }
 
   addActor(form: NgForm) {
-    this.actorService.postActor(form.value).subscribe(res => {
+    this.actorService.postActor(form.value).subscribe(res => {      
+      this.getActors();
       this.resetForm(form);
       M.toast({html:"Save Successfuly"});
     });
@@ -31,6 +32,10 @@ export class ActorComponent implements OnInit {
       this.actorService.actors = res as Actor[];
       console.log(res);
     });
+  }
+
+  editActor(actor: Actor) {
+    this.actorService.selectedActor = actor;
   }
 
   resetForm(form?: NgForm) {

@@ -4,6 +4,7 @@
       <div class="card">
         <div class="card-content">
           <form #actorForm="ngForm" (ngSubmit)=addActor(actorForm)>
+            <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="actorService.selectedActor._id">
             <div class="row">
               <div class="input-field col s12">
                 <input type="text" name="fullname" #name="ngModel" [(ngModel)]="actorService.selectedActor.fullname"
@@ -24,10 +25,19 @@
       <table>
         <thead>
           <th>Name </th>
+          <th>Operations</th>
         </thead>
         <tbody>
           <tr *ngFor="let actor of actorService.actors">
             <td>{{actor.fullname}}</td>
+            <td>
+              <a (click)="editActor(actor)">
+                <i class="material-icons">edit</i>
+              </a>
+              <a (click)="deleteActor">
+                <i class="material-icons">delete</i>
+              </a>
+            </td>
           </tr>
         </tbody>
       </table>
