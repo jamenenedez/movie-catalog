@@ -7,8 +7,12 @@
             <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="actorService.selectedActor._id">
             <div class="row">
               <div class="input-field col s12">
-                <input type="text" name="fullname" #name="ngModel" [(ngModel)]="actorService.selectedActor.fullname"
+                <input type="text" name="fullname" #fullname="ngModel" [(ngModel)]="actorService.selectedActor.fullname"
                   placeholder="Enter actor's name">
+              </div>
+              <div class="input-field col s12">
+                  {{countries}}
+                             
               </div>
               <div class="card-action">
                 <div class="input-field col s12">
@@ -34,7 +38,7 @@
               <a (click)="editActor(actor)">
                 <i class="material-icons">edit</i>
               </a>
-              <a (click)="deleteActor">
+              <a (click)="deleteActor(actor._id)">
                 <i class="material-icons">delete</i>
               </a>
             </td>

@@ -74,7 +74,11 @@ ActorController.delete = async (req, res, err) => {
 
 ActorController.save = async (req, res, err) => {
 
-    var actor = new Actor(req.body);
+    var actor = new Actor({
+        fullname: req.body.fullname,
+        nationality: req.body.nationality,
+        movies: req.body.movies,
+    });
     await actor.save().then(async () => {
         /* if (actor.nationality != "") {
             const nationality = await Nationality.findById(actor.nationality);
