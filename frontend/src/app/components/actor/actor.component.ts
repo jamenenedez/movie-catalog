@@ -4,7 +4,7 @@ import { ActorService } from '../../services/actor.service';
 import { NgForm } from '@angular/forms';
 import { Actor } from 'src/app/models/actor';
 
-declare var M:any;
+declare var M: any;
 
 @Component({
   selector: 'app-actor',
@@ -20,17 +20,34 @@ export class ActorComponent implements OnInit {
   }
 
   addActor(form: NgForm) {
-    this.actorService.postActor(form.value).subscribe(res => {      
-      this.getActors();
-      this.resetForm(form);
-      M.toast({html:"Save Successfuly"});
-    });
+    if (form.value._id) {
+      this.actorService.putActor(form.value).subscribe(res => {
+        this.getActors();
+        this.resetForm(form);
+        M.toast({ html: "Successfuly updated" });
+      });
+    }
+    else{
+      this.actorService.postActor(form.value).subscribe(res => {      
+        this.getActors();
+        this.resetForm(form);
+        M.toast({html:"Successfuly saved"});
+      });
+    }    
+  }
+
+  deleteActor(_id: String) {
+    if(confirm("Are you sure you want to delete it")){
+      this.actorService.deleteActor(_id).subscribe(res => {      
+        this.getActors();
+        M.toast({html:"Successfuly deleted"});
+      });
+    }    
   }
 
   getActors() {
     this.actorService.getActors().subscribe(res => {
       this.actorService.actors = res as Actor[];
-      console.log(res);
     });
   }
 

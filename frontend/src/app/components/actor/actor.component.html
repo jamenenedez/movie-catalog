@@ -10,11 +10,10 @@
                 <input type="text" name="fullname" #fullname="ngModel" [(ngModel)]="actorService.selectedActor.fullname"
                   placeholder="Enter actor's name">
               </div>
-              <div class="input-field col s12">
-                  {{countries}}
+              <div class="input-field col s12">                     
                              
               </div>
-              <div class="card-action">
+                  <div class="card-action">
                 <div class="input-field col s12">
                   <button class="btn right" style="margin-left:5px" (click)="resetForm(actorForm)">Clean</button>
                   <button class="btn right">Save</button>
