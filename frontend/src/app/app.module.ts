@@ -2,8 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-/* import {MyOwnCustomMaterialModule} from '../app/material.config';
- */
+import {MyOwnCustomMaterialModule} from '../app/material.config';
+
 import { AppComponent } from './app.component';
 import { ActorComponent } from './components/actor/actor.component';
 import { NationalityComponent } from './components/nationality/nationality.component';
@@ -29,7 +29,7 @@ import { UserComponent } from './components/user/user.component';
   ],
   imports: [
     BrowserModule,
-   /*  MyOwnCustomMaterialModule, */
+    MyOwnCustomMaterialModule,
     FormsModule,
     HttpClientModule
   ],

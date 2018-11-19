@@ -15,19 +15,19 @@ export class ActorService {
     this.selectedActor = new Actor();
   }
 
-  getActors() {
+  getAll() {
     return this.http.get(this.URL_API);
   }
 
-  postActor(actor: Actor) {
+  post(actor: Actor) {
     return this.http.post(this.URL_API, actor);
   }
 
-  putActor(actor: Actor) {
+  put(actor: Actor) {
     return this.http.put(this.URL_API + `/${actor._id}`, actor);
   }
 
-  deleteActor(_id: String) {
+  delete(_id: String) {
     return this.http.delete(this.URL_API + `/${_id}`);
   }
 }

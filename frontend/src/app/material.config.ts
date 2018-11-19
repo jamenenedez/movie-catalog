@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
+import { MatFormFieldModule, MatSelectModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule } from '@angular/material';
 
 @NgModule({
     imports: [
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatCheckboxModule
+        MatSelectModule,
+        MatFormFieldModule,
+        BrowserAnimationsModule
     ],
     exports: [
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatCheckboxModule
+        MatSelectModule,
+        MatFormFieldModule,
+        BrowserAnimationsModule
     ]
 })
 export class MyOwnCustomMaterialModule { }

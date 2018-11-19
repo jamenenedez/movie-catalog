@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActorService } from '../../services/actor.service';
 import { NgForm } from '@angular/forms';
 import { Actor } from 'src/app/models/actor';
+import { NationalityService } from 'src/app/services/nationality.service';
+import { Nationality } from 'src/app/models/nationality';
 
 declare var M: any;
 
@@ -13,54 +15,61 @@ declare var M: any;
 })
 export class ActorComponent implements OnInit {
 
-  constructor(private actorService: ActorService) { }
+  constructor(private actorService: ActorService, public nationalityService: NationalityService) { }
 
   ngOnInit() {
-    this.getActors();
+    this.getAll();
+    this.getAllNationalities();
   }
 
-  addActor(form: NgForm) {
-    if (form.value._id) {
-      this.actorService.putActor(form.value).subscribe(res => {
-        this.getActors();
-        this.resetForm(form);
+  add(form: NgForm) {
+    if (form.value._id != "" && form.value._id != null) {
+      this.actorService.put(form.value).subscribe(res => {
+        this.getAll();
+        this.reset(form);
         M.toast({ html: "Successfuly updated" });
       });
     }
-    else{
-      this.actorService.postActor(form.value).subscribe(res => {      
-        this.getActors();
-        this.resetForm(form);
-        M.toast({html:"Successfuly saved"});
+    else {
+      this.actorService.post(form.value).subscribe(res => {
+        this.getAll();
+        this.reset(form);
+        M.toast({ html: "Successfuly saved" });
       });
-    }    
+    }
   }
 
-  deleteActor(_id: String) {
-    if(confirm("Are you sure you want to delete it")){
-      this.actorService.deleteActor(_id).subscribe(res => {      
-        this.getActors();
-        M.toast({html:"Successfuly deleted"});
+  delete(_id: String) {
+    if (confirm("Are you sure you want to delete it")) {
+      this.actorService.delete(_id).subscribe(res => {
+        this.getAll();
+        M.toast({ html: "Successfuly deleted" });
       });
-    }    
+    }
   }
 
-  getActors() {
-    this.actorService.getActors().subscribe(res => {
+  getAll() {
+    this.actorService.getAll().subscribe(res => {
       this.actorService.actors = res as Actor[];
     });
   }
 
-  editActor(actor: Actor) {
+  getAllNationalities() {
+    this.nationalityService.getAll().subscribe(res => {
+      this.nationalityService.nationalities = res as Nationality[];
+      console.log(res);
+    });
+  }
+
+  edit(actor: Actor) {
     this.actorService.selectedActor = actor;
   }
 
-  resetForm(form: NgForm) {
-    console.log(form);
-   /*  if (form) {
+  reset(form: NgForm) {
+    if (form) {
       form.reset();
       this.actorService.selectedActor = new Actor();
-    } */
+    }
 
   }
 

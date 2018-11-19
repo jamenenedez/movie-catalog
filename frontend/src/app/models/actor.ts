@@ -1,6 +1,6 @@
 export class Actor {
 
-    constructor(_id = "", fullname = "", nationality = []) {
+    constructor(_id = "", fullname = "", nationality = "") {
         this._id = _id;
         this.fullname = fullname;
         this.nationality = nationality;
@@ -8,5 +8,5 @@ export class Actor {
 
     _id: String;
     fullname: String;
-    nationality: Array<String>;
+    nationality: String;
 }

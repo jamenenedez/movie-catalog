@@ -3,19 +3,23 @@
     <div class="col s5">
       <div class="card">
         <div class="card-content">
-          <form #actorForm="ngForm" (ngSubmit)=addActor(actorForm)>
+          <form #actorForm="ngForm" (ngSubmit)=add(actorForm)>
             <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="actorService.selectedActor._id">
             <div class="row">
               <div class="input-field col s12">
                 <input type="text" name="fullname" #fullname="ngModel" [(ngModel)]="actorService.selectedActor.fullname"
                   placeholder="Enter actor's name">
               </div>
-              <div class="input-field col s12">                     
-                             
+              <div class="input-field col s12">
+                <mat-form-field>
+                  <mat-select placeholder="Select Nationality">
+                    <mat-option *ngFor="let nationality of nationalityService.nationalities" [value]="nationality._id">{{nationality.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
-                  <div class="card-action">
+              <div class="card-action">
                 <div class="input-field col s12">
-                  <button type="reset" class="btn right" style="margin-left:5px" (click)="resetForm(actorForm)">Clean</button>
+                  <button type="reset" class="btn right" style="margin-left:5px">Clean</button>
                   <button type="submit" class="btn right">Save</button>
                 </div>
               </div>
@@ -34,10 +38,10 @@
           <tr *ngFor="let actor of actorService.actors">
             <td>{{actor.fullname}}</td>
             <td>
-              <a (click)="editActor(actor)">
+              <a (click)="edit(actor)">
                 <i class="material-icons">edit</i>
               </a>
-              <a (click)="deleteActor(actor._id)">
+              <a (click)="delete(actor._id)">
                 <i class="material-icons">delete</i>
               </a>
             </td>
