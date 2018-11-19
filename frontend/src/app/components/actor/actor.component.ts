@@ -55,11 +55,12 @@ export class ActorComponent implements OnInit {
     this.actorService.selectedActor = actor;
   }
 
-  resetForm(form?: NgForm) {
-    if (form) {
+  resetForm(form: NgForm) {
+    console.log(form);
+   /*  if (form) {
       form.reset();
       this.actorService.selectedActor = new Actor();
-    }
+    } */
 
   }
 
