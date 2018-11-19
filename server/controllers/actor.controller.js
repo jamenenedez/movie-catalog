@@ -64,8 +64,6 @@ actorController.update = (req, res) => {
 actorController.delete = (req, res) => {
     const { id } = req.params;
     Actor.findByIdAndRemove(id)
-        .select('-__v')
-        .populate('nationality movies', 'name -_id')
         .then((actor) => {
             if (actor) {
                 res.status(200).send({ message: 'Actor successfuly deleted!' });
