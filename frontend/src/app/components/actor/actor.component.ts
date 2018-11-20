@@ -57,7 +57,6 @@ export class ActorComponent implements OnInit {
   getAllNationalities() {
     this.nationalityService.getAll().subscribe(res => {
       this.nationalityService.nationalities = res as Nationality[];
-      console.log(res);
     });
   }
 

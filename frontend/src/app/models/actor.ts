@@ -1,6 +1,8 @@
+import { Nationality } from "./nationality";
+
 export class Actor {
 
-    constructor(_id = "", fullname = "", nationality = "") {
+    constructor(_id = "", fullname = "", nationality = {_id:"", name:""}) {
         this._id = _id;
         this.fullname = fullname;
         this.nationality = nationality;
@@ -8,5 +10,5 @@ export class Actor {
 
     _id: String;
     fullname: String;
-    nationality: String;
+    nationality: Nationality;
 }

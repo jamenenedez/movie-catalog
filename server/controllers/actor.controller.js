@@ -81,7 +81,7 @@ actorController.create = (req, res) => {
         nationality: req.body.nationality,
         movies: req.body.movies,
     });
-    actor.save().then(async () => {
+    actor.save().then(() => {
         /* if (actor.nationality != "") {
             const nationality = await Nationality.findById(actor.nationality);
             nationality.actors.push(actor._id);

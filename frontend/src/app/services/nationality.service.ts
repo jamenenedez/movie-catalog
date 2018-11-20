@@ -19,6 +19,10 @@ export class NationalityService {
     return this.http.get(this.URL_API);
   }
 
+  getOne(id: String) {
+    return this.http.get(this.URL_API + `/${id}`);
+  }
+
   post(nationality: Nationality) {
     return this.http.post(this.URL_API, nationality);
   }
