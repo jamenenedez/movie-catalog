@@ -1,3 +1,104 @@
-<p>
-  movie works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col s5">
+      <div class="card">
+        <div class="card-content">
+          <label style="font-family: 'Courier New', Courier, monospace; font-size: 2em" for="movieForm">Manage Movie</label>
+          <form #movieForm="ngForm" (ngSubmit)=add(movieForm) class="css-form">
+            <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="movieService.selected._id">
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="title" #title="ngModel" [(ngModel)]="movieService.selected.title" placeholder="Enter movie's title"
+                  required>
+              </div>
+              <div class="input-field col s12">
+                <mat-form-field>
+                  <mat-select placeholder="Select movie's category" [(ngModel)]="category" name="category">
+                    <mat-option *ngFor="let category of categoryService.categories" [value]="category._id">{{category.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="input-field col s12">
+                <mat-form-field>
+                  <mat-select placeholder="Select movie's genders" [(ngModel)]="gender" name="gender" multiple>
+                    <mat-option *ngFor="let gender of genderService.genders" [value]="gender._id">{{gender.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="input-field col s12">
+                <mat-form-field>
+                  <mat-select placeholder="Select movie's country" [(ngModel)]="country" name="country">
+                    <mat-option *ngFor="let country of countryService.countries" [value]="country._id">{{country.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="input-field col s12">
+                <mat-form-field>
+                  <mat-select placeholder="Select movie's director" [(ngModel)]="director" name="director">
+                    <mat-option *ngFor="let director of directorService.directors" [value]="director._id">{{director.fullname}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="input-field col s12">
+                <mat-form-field>
+                  <mat-select placeholder="Select movie's actors" [(ngModel)]="actor" name="actor" multiple>
+                    <mat-option *ngFor="let actor of actorService.actors" [value]="actor._id">{{actor.fullname}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="card-action">
+                <div class="input-field col s12">
+                  <button type="reset" class="btn right" style="margin-left:5px">Clean</button>
+                  <button type="submit" class="btn right" [disabled]="!movieForm.valid">Save</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col s7">
+      <table>
+        <thead>
+          <th>Title </th>
+          <th>Category</th>
+          <th>Genders</th>
+          <th>Year</th>
+          <th>Country</th>
+          <th>Duration</th>
+          <th>Actors</th>
+          <th>Director</th>
+          <th>Operations</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let movie of movieService.movies">
+            <td>{{movie.title}}</td>
+            <td>{{movie.category.name}}</td>
+            <td>
+          <tr *ngFor="let gender of genderService.genders">
+            <td>{{gender.name}}</td>
+          </tr>
+          </td>
+          <td>{{movie.year}}</td>
+          <td>{{movie.country.name}}</td>
+          <td>{{movie.duration}}</td>
+          <td>
+            <tr *ngFor="let actor of actorService.actors">
+              <td>{{actor.fullname}}</td>
+            </tr>
+          </td>
+          <td>{{movie.director.fullname}}</td>
+          <td>
+            <a (click)="edit(movie)">
+              <i class="material-icons">edit</i>
+            </a>
+            <a (click)="delete(movie._id)">
+              <i class="material-icons">delete</i>
+            </a>
+          </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

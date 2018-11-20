@@ -3,6 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
 import { NgForm } from '@angular/forms';
 import { Movie } from 'src/app/models/movie';
+import { Category } from 'src/app/models/category';
+import { CategoryService } from 'src/app/services/category.service';
+import { ActorService } from 'src/app/services/actor.service';
+import { DirectorService } from 'src/app/services/director.service';
+import { CountryService } from 'src/app/services/country.service';
+import { GenderService } from 'src/app/services/gender.service';
+import { Actor } from 'src/app/models/actor';
+import { Director } from 'src/app/models/director';
+import { Gender } from 'src/app/models/gender';
+import { Country } from 'src/app/models/country';
 
 declare var M: any;
 
@@ -13,10 +23,21 @@ declare var M: any;
 })
 export class MovieComponent implements OnInit {
 
-  constructor(private movieService: MovieService) { }
+  constructor(private movieService: MovieService,
+    public categoryService: CategoryService,
+    public actorService: ActorService,
+    public directorService: DirectorService,
+    public countryService: CountryService,
+    public genderService: GenderService,
+  ) { }
 
   ngOnInit() {
     this.getAll();
+    this.getAllActors();
+    this.getAllCategories();
+    this.getAllDirectors();
+    this.getAllGenders();
+    this.getAllCountries();
   }
 
   add(form: NgForm) {
@@ -53,7 +74,37 @@ export class MovieComponent implements OnInit {
 
   edit(movie: Movie) {
     this.movieService.selected = movie;
-  /*   this.movieService.selected.nationality = movie.nationality; */
+    /*   this.movieService.selected.nationality = movie.nationality; */
+  }
+
+  getAllCategories() {
+    this.categoryService.getAll().subscribe(res => {
+      this.categoryService.categories = res as Category[];
+    });
+  }
+
+  getAllActors() {
+    this.actorService.getAll().subscribe(res => {
+      this.actorService.actors = res as Actor[];
+    });
+  }
+
+  getAllDirectors() {
+    this.directorService.getAll().subscribe(res => {
+      this.directorService.directors = res as Director[];
+    });
+  }
+
+  getAllGenders() {
+    this.genderService.getAll().subscribe(res => {
+      this.genderService.genders = res as Gender[];
+    });
+  }
+
+  getAllCountries() {
+    this.countryService.getAll().subscribe(res => {
+      this.countryService.countries = res as Country[];
+    });
   }
 
   reset(form: NgForm) {
