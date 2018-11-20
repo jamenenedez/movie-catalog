@@ -3,7 +3,7 @@
     <div class="col s5">
       <div class="card">
         <div class="card-content">
-          <label style="font-family: 'Courier New', Courier, monospace; font-size: 2em" for="directorForm">Director</label>
+          <label style="font-family: 'Courier New', Courier, monospace; font-size: 2em" for="directorForm">Manage Director</label>
           <form #directorForm="ngForm" (ngSubmit)=add(directorForm) class="css-form">
             <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="directorService.selected._id">
             <div class="row">

@@ -3,7 +3,7 @@
     <div class="col s5">
       <div class="card">
         <div class="card-content">
-          <label style="font-family: 'Courier New', Courier, monospace; font-size: 2em" for="actorForm">Actor</label>
+          <label style="font-family: 'Courier New', Courier, monospace; font-size: 2em" for="actorForm">Manage Actor</label>
           <form #actorForm="ngForm" (ngSubmit)=add(actorForm) class="css-form">
             <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="actorService.selected._id">
             <div class="row">
