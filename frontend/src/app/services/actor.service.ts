@@ -8,11 +8,11 @@ import { Actor } from '../models/actor';
 export class ActorService {
 
   readonly URL_API = 'http://localhost:3000/api/actors';
-  selectedActor: Actor;
+  selected: Actor;
   actors: Actor[];
 
   constructor(private http: HttpClient) {
-    this.selectedActor = new Actor();
+    this.selected = new Actor();
   }
 
   getAll() {

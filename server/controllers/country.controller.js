@@ -74,7 +74,10 @@ countryController.delete = (req, res) => {
 };
 
 countryController.create = (req, res) => {
-    var country = new Country(req.body);
+    var country = new Country({
+        name: req.body.name,
+        movies: req.body.movies
+    });
     country.save().then(() => {
         res.status(200).send({ message: 'Country successfuly crated!' });
         /* var enhanced_country = await Country.findById(enhanced_country._id).select('-__v').populate('movies', 'name -_id');

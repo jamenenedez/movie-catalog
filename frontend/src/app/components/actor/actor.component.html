@@ -3,24 +3,25 @@
     <div class="col s5">
       <div class="card">
         <div class="card-content">
-          <form #actorForm="ngForm" (ngSubmit)=add(actorForm)>
-            <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="actorService.selectedActor._id">
+          <label style="font-family: 'Courier New', Courier, monospace; font-size: 2em" for="actorForm">Actor</label>
+          <form #actorForm="ngForm" (ngSubmit)=add(actorForm) class="css-form">
+            <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="actorService.selected._id">
             <div class="row">
               <div class="input-field col s12">
-                <input type="text" name="fullname" #fullname="ngModel" [(ngModel)]="actorService.selectedActor.fullname"
-                  placeholder="Enter actor's name">
+                <input type="text" name="fullname" #fullname="ngModel" [(ngModel)]="actorService.selected.fullname"
+                  placeholder="Enter actor's name" required>
               </div>
               <div class="input-field col s12">
                 <mat-form-field>
-                  <mat-select placeholder="Select actor's nationality" [(ngModel)]="nationality" name="nationality" >
+                  <mat-select placeholder="Select actor's nationality" [(ngModel)]="nationality" name="nationality">
                     <mat-option *ngFor="let nationality of nationalityService.nationalities" [value]="nationality._id">{{nationality.name}}</mat-option>
                   </mat-select>
-                </mat-form-field>                
+                </mat-form-field>
               </div>
               <div class="card-action">
                 <div class="input-field col s12">
                   <button type="reset" class="btn right" style="margin-left:5px">Clean</button>
-                  <button type="submit" class="btn right">Save</button>
+                  <button type="submit" class="btn right" [disabled]="!actorForm.valid" >Save</button>
                 </div>
               </div>
             </div>

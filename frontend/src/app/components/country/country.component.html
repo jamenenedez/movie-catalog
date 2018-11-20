@@ -1,3 +1,47 @@
-<p>
-  country works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col s5">
+      <div class="card">
+        <div class="card-content">
+          <label style="font-family: 'Courier New', Courier, monospace; font-size: 2em" for="countryForm">Country</label>
+          <form #countryForm="ngForm" (ngSubmit)=add(countryForm) class="css-form">
+            <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="countryService.selected._id">
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="name" #name="ngModel" [(ngModel)]="countryService.selected.name"
+                  placeholder="Enter country's name" required>
+              </div>
+              <div class="card-action">
+                <div class="input-field col s12">
+                  <button type="reset" class="btn right" style="margin-left:5px">Clean</button>
+                  <button type="submit" class="btn right" [disabled]="!countryForm.valid">Save</button>
+                </div>
+              </div>
+            </div>
+          </form>`
+        </div>
+      </div>
+    </div>
+    <div class="col s7">
+      <table>
+        <thead>
+          <th>Name </th>
+          <th>Operations</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let country of countryService.countries">
+            <td>{{country.name}}</td>
+            <td>
+              <a (click)="edit(country)">
+                <i class="material-icons">edit</i>
+              </a>
+              <a (click)="delete(country._id)">
+                <i class="material-icons">delete</i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

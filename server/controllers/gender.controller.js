@@ -48,7 +48,7 @@ genderController.update = (req, res) => {
         req.body,
         { new: true },
     ).select('-__v')
-        .populate('movies', 'name -_id')
+        .populate('movies', 'name')
         .then((gender) => {
             if (gender) {
                 res.status(200).send({ message: 'Gender successfuly updated!' });

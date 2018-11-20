@@ -61,13 +61,14 @@ export class ActorComponent implements OnInit {
   }
 
   edit(actor: Actor) {
-    this.actorService.selectedActor = actor;
+    this.actorService.selected = actor;
+  /*   this.actorService.selected.nationality = actor.nationality; */
   }
 
   reset(form: NgForm) {
     if (form) {
       form.reset();
-      this.actorService.selectedActor = new Actor();
+      this.actorService.selected = new Actor();
     }
 
   }

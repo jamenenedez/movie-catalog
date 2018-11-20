@@ -8,7 +8,7 @@ actorController.getOne = (req, res) => {
     const { id } = req.params;
     Actor.findById(id)
         .select('-__v')
-        .populate('nationality movies', 'name -_id')
+        .populate('nationality movies', 'name')
         .then((actor) => {
             if (actor) {
                 res.status(200).jsonp(actor);
@@ -30,7 +30,7 @@ actorController.getAll = (req, res) => {
     }
     Actor.find({ $or: [params] })
         .select('-__v')
-        .populate('nationality movies', 'name -_id')
+        .populate('nationality movies', 'name')
         .then((actors) => {
             if (actors.length > 0) {
                 res.status(200).jsonp(actors);
@@ -49,7 +49,7 @@ actorController.update = (req, res) => {
         req.body,
         { new: true },
     ).select('-__v')
-        .populate('nationality movies', 'name -_id')
+        .populate('nationality movies', 'name')
         .then((actor) => {
             if (actor) {
                 res.status(200).send({ message: 'Actor successfuly updated!' });
