@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MatFormFieldModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
@@ -8,14 +9,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         MatFormFieldModule,
         BrowserAnimationsModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        ReactiveFormsModule
     ],
     exports: [
         MatSelectModule,
         MatFormFieldModule,
         BrowserAnimationsModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        ReactiveFormsModule
     ]
 })
 export class MyOwnCustomMaterialModule { }
