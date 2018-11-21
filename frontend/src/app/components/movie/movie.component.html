@@ -29,7 +29,7 @@
               </div>
               <div class="input-field col s12">
                 <mat-form-field>
-                  <mat-select placeholder="Select movie's genders" [(ngModel)]="genders" name="gender"
+                  <mat-select placeholder="Select movie's genders" [(ngModel)]="genders" name="genders"
                     multiple>
                     <mat-option *ngFor="let gender of genderService.genders" [value]="gender._id">{{gender.name}}</mat-option>
                   </mat-select>
@@ -52,7 +52,7 @@
               </div>
               <div class="input-field col s12">
                 <mat-form-field>
-                  <mat-select placeholder="Select movie's actors" [(ngModel)]="actor" name="actor" multiple>
+                  <mat-select placeholder="Select movie's actors" [(ngModel)]="actors" name="actors" multiple>
                     <mat-option *ngFor="let actor of actorService.actors" [value]="actor._id">{{actor.fullname}}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -86,7 +86,7 @@
             <td>{{movie.title}}</td>
             <td>{{movie.category.name}}</td>
             <td>
-          <tr *ngFor="let gender of genderService.genders">
+          <tr *ngFor="let gender of movie.genders">
             <td>{{gender.name}}</td>
           </tr>
           </td>
@@ -94,7 +94,7 @@
           <td>{{movie.country.name}}</td>
           <td>{{movie.duration}}</td>
           <td>
-            <tr *ngFor="let actor of actorService.actors">
+            <tr *ngFor="let actor of movie.actors">
               <td>{{actor.fullname}}</td>
             </tr>
           </td>

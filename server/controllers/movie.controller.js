@@ -78,6 +78,8 @@ movieController.delete = (req, res) => {
 };
 
 movieController.create = (req, res) => {
+    console.log(req.body);
+    
     var movie = new Movie({
         title: req.body.title,
         category: req.body.category,
@@ -92,11 +94,7 @@ movieController.create = (req, res) => {
     });
     movie.save().then(() => {
         res.status(200).send({ message: 'Movie successfuly created!' });
-        /* var enhanced_movie = await Movie.findById(enhanced_movie._id).select('-__v')
-            .populate('actors director', 'fullname -_id')
-            .populate('movies genders country category', 'name -_id')
-            .populate({ path: 'scores.user', populate: { path: 'user' } });
-        res.status(200).jsonp(enhanced_movie); */
+       
     }).catch((error) => {
         res.status(500).jsonp(error.message);
     });
