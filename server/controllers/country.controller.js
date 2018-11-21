@@ -7,7 +7,7 @@ countryController.getOne = (req, res) => {
     const { id } = req.params;
     Country.findById(id)
         .select('-__v')
-        .populate('movies', 'name -_id')
+        .populate('movies', 'name')
         .then((country) => {
             if (country) {
                 res.status(200).jsonp(country);
@@ -62,7 +62,7 @@ countryController.update = (req, res) => {
 
 countryController.delete = (req, res) => {
     const { id } = req.params;
-    Country.findByIdAndRemove(req.params.id).populate('movies', 'name -_id').then((country) => {
+    Country.findByIdAndRemove(req.params.id).populate('movies', 'name').then((country) => {
         if (country) {
             res.status(200).send({ message: 'Country successfuly deleted!' });
         } else {

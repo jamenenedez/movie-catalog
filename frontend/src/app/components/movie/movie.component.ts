@@ -31,6 +31,8 @@ export class MovieComponent implements OnInit {
     public genderService: GenderService,
   ) { }
 
+  genders: Gender[];
+
   ngOnInit() {
     this.getAll();
     this.getAllActors();
@@ -74,6 +76,7 @@ export class MovieComponent implements OnInit {
 
   edit(movie: Movie) {
     this.movieService.selected = movie;
+    this.genders = this.genderService.genders;
     /*   this.movieService.selected.nationality = movie.nationality; */
   }
 

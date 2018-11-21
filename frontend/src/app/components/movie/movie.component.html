@@ -12,14 +12,8 @@
                   required>
               </div>
               <div class="input-field col s12">
-                <!-- <mat-form-field>
-                  <input matInput [matDatepicker]="dp" formControl="date">
-                  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-                  <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)" panelClass="example-month-picker">
-                  </mat-datepicker>
-                </mat-form-field> -->
-                <!--  <input type="text" name="year" #year="ngModel" [(ngModel)]="movieService.selected.year" placeholder="Enter movie's year"
-                    required> -->
+                <input type="number" name="year" #year="ngModel" [(ngModel)]="movieService.selected.year" min=1900
+                  placeholder="Enter movie's year" required>
               </div>
               <div class="input-field col s12">
                 <input type="number" step="any" min="0" max="4999" ng-pattern="/^1234$/" name="duration" #duration="ngModel"
@@ -27,28 +21,31 @@
               </div>
               <div class="input-field col s12">
                 <mat-form-field>
-                  <mat-select placeholder="Select movie's category" [(ngModel)]="category" name="category">
+                  <mat-select placeholder="Select movie's category" [(ngModel)]="movieService.selected.category._id"
+                    name="category">
                     <mat-option *ngFor="let category of categoryService.categories" [value]="category._id">{{category.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
               <div class="input-field col s12">
                 <mat-form-field>
-                  <mat-select placeholder="Select movie's genders" [(ngModel)]="gender" name="gender" multiple>
+                  <mat-select placeholder="Select movie's genders" [(ngModel)]="genders" name="gender"
+                    multiple>
                     <mat-option *ngFor="let gender of genderService.genders" [value]="gender._id">{{gender.name}}</mat-option>
                   </mat-select>
-                </mat-form-field>
+                </mat-form-field>               
               </div>
               <div class="input-field col s12">
                 <mat-form-field>
-                  <mat-select placeholder="Select movie's country" [(ngModel)]="country" name="country">
+                  <mat-select placeholder="Select movie's country" [(ngModel)]="movieService.selected.country._id" name="country">
                     <mat-option *ngFor="let country of countryService.countries" [value]="country._id">{{country.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
               <div class="input-field col s12">
                 <mat-form-field>
-                  <mat-select placeholder="Select movie's director" [(ngModel)]="director" name="director">
+                  <mat-select placeholder="Select movie's director" [(ngModel)]="movieService.selected.director._id"
+                    name="director">
                     <mat-option *ngFor="let director of directorService.directors" [value]="director._id">{{director.fullname}}</mat-option>
                   </mat-select>
                 </mat-form-field>

@@ -8,7 +8,7 @@ nationalityController.getOne = (req, res) => {
     const { id } = req.params;
     Nationality.findById(id)
         .select('-__v')
-        .populate('actors directors', 'fullname -_id')
+        .populate('actors directors', 'fullname')
         .then((nationality) => {
             if (nationality) {
                 res.status(200).jsonp(nationality);
@@ -30,7 +30,7 @@ nationalityController.getAll = (req, res) => {
     }
     Nationality.find({ $or: [params] })
         .select('-__v')
-        .populate('actors directors', 'fullname -_id')
+        .populate('actors directors', 'fullname')
         .then((nationalities) => {
             if (nationalities.length > 0) {
                 res.status(200).jsonp(nationalities);

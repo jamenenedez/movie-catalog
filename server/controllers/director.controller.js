@@ -8,7 +8,7 @@ directorController.getOne = (req, res) => {
     const { id } = req.params;
     Director.findById(id)
         .select('-__v')
-        .populate('nationality movies', 'name -_id')
+        .populate('nationality movies', 'name')
         .then((director) => {
             if (director) {
                 res.status(200).jsonp(director);
@@ -30,7 +30,7 @@ directorController.getAll = (req, res) => {
     }
     Director.find({ $or: [params] })
         .select('-__v')
-        .populate('nationality movies', 'name -_id')
+        .populate('nationality movies', 'name')
         .then((directors) => {
             if (directors.length > 0) {
                 res.status(200).jsonp(directors);
@@ -49,7 +49,7 @@ directorController.update = (req, res) => {
         req.body,
         { new: true },
     ).select('-__v')
-        .populate('nationality movies', 'name -_id')
+        .populate('nationality movies', 'name')
         .then((director) => {
             if (director) {
                 res.status(200).send({ message: 'Director successfuly updated!' });

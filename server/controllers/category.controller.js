@@ -7,7 +7,7 @@ categoryController.getOne =  (req, res) => {
     const { id } = req.params;
      Category.findById(id)
         .select('-__v')
-        .populate('movies', 'name -_id')
+        .populate('movies', 'name')
         .then((category) => {
             if (category) {
                 res.status(200).jsonp(category);
@@ -29,7 +29,7 @@ categoryController.getAll = (req, res) => {
     }
     Category.find({ $or: [params] })
         .select('-__v')
-        .populate('movies', 'name -_id')
+        .populate('movies', 'name')
         .then((categories) => {
             if (categories.length > 0) {
                 res.status(200).jsonp(categories);
@@ -48,7 +48,7 @@ categoryController.update = (req, res) => {
         req.body,
         { new: true },
     ).select('-__v')
-        .populate('movies', 'name -_id')
+        .populate('movies', 'name')
         .then((category) => {
             if (category) {
                 res.status(200).send({ message: 'Category successfuly updated!' });
@@ -63,7 +63,7 @@ categoryController.update = (req, res) => {
 categoryController.delete = (req, res) => {
     const { id } = req.params;
     Category.findByIdAndRemove(id)
-        .populate('movies', 'name -_id')
+        .populate('movies', 'name')
         .then((category) => {
             if (category) {
                 res.status(200).send({ message: 'Category successfuly deleted!' });

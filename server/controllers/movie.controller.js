@@ -10,8 +10,8 @@ var url = require('url');
 movieController.getOne = (req, res) => {
     const { id } = req.params;
     Movie.findById(id).select('-__v')
-        .populate('actors director', 'fullname -_id')
-        .populate('movies genders country category', 'name -_id')
+        .populate('actors director', 'fullname')
+        .populate('movies genders country category', 'name')
         .populate({ path: 'scores.user', populate: { path: 'user' } })
         .then((movie) => {
             if (movie) {
@@ -33,8 +33,8 @@ movieController.getAll = async (req, res) => {
         }
     }
     await Movie.find({ $or: [params] }).select('-__v')
-        .populate('actors director', 'fullname -_id')
-        .populate('movies genders country category', 'name -_id')
+        .populate('actors director', 'fullname')
+        .populate('movies genders country category', 'name')
         .populate({ path: 'scores.user', populate: { path: 'user' } }).then((movies) => {
             if (movies.length > 0) {
                 res.status(200).jsonp(movies);
