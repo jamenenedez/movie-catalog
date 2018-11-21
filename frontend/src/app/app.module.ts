@@ -25,7 +25,7 @@ import { UserComponent } from './components/user/user.component';
     DirectorComponent,
     GenderComponent,
     MovieComponent,
-    UserComponent
+    UserComponent    
   ],
   imports: [
     BrowserModule,

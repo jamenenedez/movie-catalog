@@ -31,7 +31,7 @@ export class MovieComponent implements OnInit {
     public genderService: GenderService,
   ) { }
 
-  genders: Gender[];
+  genders: Gender[] = this.movieService.selected.genders;
 
   ngOnInit() {
     this.getAll();
@@ -43,6 +43,7 @@ export class MovieComponent implements OnInit {
   }
 
   add(form: NgForm) {
+    console.log(form.value);
     if (form.value._id != "" && form.value._id != null) {
       this.movieService.put(form.value).subscribe(res => {
         this.getAll();
@@ -76,7 +77,6 @@ export class MovieComponent implements OnInit {
 
   edit(movie: Movie) {
     this.movieService.selected = movie;
-    this.genders = this.genderService.genders;
     /*   this.movieService.selected.nationality = movie.nationality; */
   }
 

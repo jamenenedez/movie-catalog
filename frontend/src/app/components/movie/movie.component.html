@@ -29,7 +29,7 @@
               </div>
               <div class="input-field col s12">
                 <mat-form-field>
-                  <mat-select [formControl]="genders" placeholder="Select movie's genders" [(ngModel)]="genders" name="genders"
+                  <mat-select placeholder="Select movie's genders" [(ngModel)]="genders" name="genders"
                     multiple>
                     <mat-option *ngFor="let gender of genderService.genders" [value]="gender._id">{{gender.name}}</mat-option>
                   </mat-select>
