@@ -2,7 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import {MyOwnCustomMaterialModule} from '../app/material.config';
+import { RouterModule, Routes } from '@angular/router';
+import { MyOwnCustomMaterialModule } from '../app/material.config';
 
 import { AppComponent } from './app.component';
 import { ActorComponent } from './components/actor/actor.component';
@@ -12,8 +13,14 @@ import { CountryComponent } from './components/country/country.component';
 import { DirectorComponent } from './components/director/director.component';
 import { GenderComponent } from './components/gender/gender.component';
 import { MovieComponent } from './components/movie/movie.component';
-import { UserComponent } from './components/user/user.component';   
+import { UserComponent } from './components/user/user.component';
 
+const routes: Routes = [
+  {
+    path: 'actor',
+    component: ActorComponent
+  }
+];
 
 @NgModule({
   declarations: [
@@ -25,13 +32,14 @@ import { UserComponent } from './components/user/user.component';
     DirectorComponent,
     GenderComponent,
     MovieComponent,
-    UserComponent    
+    UserComponent
   ],
   imports: [
     BrowserModule,
     MyOwnCustomMaterialModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot(routes)
   ],
   providers: [],
   bootstrap: [AppComponent]
