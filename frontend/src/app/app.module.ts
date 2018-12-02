@@ -14,11 +14,40 @@ import { DirectorComponent } from './components/director/director.component';
 import { GenderComponent } from './components/gender/gender.component';
 import { MovieComponent } from './components/movie/movie.component';
 import { UserComponent } from './components/user/user.component';
+import { DetailsComponent } from './components/details/details.component';
 
 const routes: Routes = [
   {
     path: 'actor',
     component: ActorComponent
+  },
+  {
+    path: 'country',
+    component: CountryComponent
+  },
+  {
+    path: 'gender',
+    component: GenderComponent
+  },
+  {
+    path: 'category',
+    component: CategoryComponent
+  },
+  {
+    path: 'movie',
+    component: MovieComponent
+  },
+  {
+    path: 'nationality',
+    component: NationalityComponent
+  },
+  {
+    path: 'director',
+    component: DirectorComponent
+  },
+  {
+    path: 'details/:id',
+    component: DetailsComponent
   }
 ];
 
@@ -32,7 +61,8 @@ const routes: Routes = [
     DirectorComponent,
     GenderComponent,
     MovieComponent,
-    UserComponent
+    UserComponent,
+    DetailsComponent
   ],
   imports: [
     BrowserModule,

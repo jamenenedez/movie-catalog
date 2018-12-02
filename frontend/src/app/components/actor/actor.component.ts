@@ -17,6 +17,8 @@ export class ActorComponent implements OnInit {
 
   constructor(private actorService: ActorService, public nationalityService: NationalityService) { }
 
+  actor$: Actor;
+
   ngOnInit() {
     this.getAll();
     this.getAllNationalities();
@@ -61,6 +63,10 @@ export class ActorComponent implements OnInit {
   }
 
   edit(actor: Actor) {
+    this.actorService.selected = actor;
+  }
+
+  getOne(actor: Actor) {
     this.actorService.selected = actor;
   }
 

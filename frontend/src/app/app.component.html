@@ -5,29 +5,36 @@
       </div>
       <ul class="nav navbar-nav">
         <li>
-          <a routerLink="/deals" routerLinkActive="active">Deals</a>
+          <a routerLink="/actor" routerLinkActive="active">actors</a>
         </li>
         <li>
-          <a routerLink="/special" routerLinkActive="active">Private Deals</a>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a>Log In</a>
+          <a routerLink="/category" routerLinkActive="active">categories</a>
         </li>
         <li>
-          <a>Log Out</a>
+          <a routerLink="/movie" routerLinkActive="active">movies</a>
         </li>
-      </ul>
+        <li>
+          <a routerLink="/country" routerLinkActive="active">countries</a>
+        </li>
+        <li>
+          <a routerLink="/director" routerLinkActive="active">directors</a>
+        </li><li>
+          <a routerLink="/gender" routerLinkActive="active">genders</a>
+        </li>
+        <li>
+          <a routerLink="/nationality" routerLinkActive="active">nationalities</a>
+        </li>
+      </ul>      
     </nav>
-    <div class="col-sm-12">
-      <router-outlet></router-outlet>
-    </div>
+    <!-- <div class="col-sm-12"> -->
+     <!--  <router-outlet></router-outlet> -->
+   <!--  </div> -->
   </div>
-<app-actor></app-actor>
+  <router-outlet></router-outlet>
+<!-- <app-actor></app-actor>
 <app-director></app-director>
 <app-gender></app-gender>
 <app-country></app-country>
 <app-category></app-category>
 <app-nationality></app-nationality>
-<app-movie></app-movie>
+<app-movie></app-movie> -->

@@ -19,6 +19,10 @@ export class ActorService {
     return this.http.get(this.URL_API);
   }
 
+  getOne(_id) {
+    return this.http.get(this.URL_API+ `/${_id}`);
+  }
+
   post(actor: Actor) {
     return this.http.post(this.URL_API, actor);
   }
